@@ -83,7 +83,7 @@ const weekScale = d3
 
 weekBox
     .selectAll('text')
-    .data(weeks)
+    // .data(weeks)
     .enter()
     .append('text')
     .text((v) => {
