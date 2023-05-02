@@ -1,6 +1,8 @@
 const dataChart = async () => {
     // 获去当前年
-    const year = new Date().getFullYear();
+    const date = new Date();
+    const year = date.getFullYear();
+    const localDay = year + '-' + (date.getMonth() + 1) + '-' + date.getDay()
     const data = [];
     // 遍历循环当前日期
     for (let index = 0; index < 12; index++) {
@@ -8,16 +10,21 @@ const dataChart = async () => {
         const monthNumber = new Date(year, month, 0).getDate();
         for (let index = 1; index < monthNumber + 1; index++) {
             const day = year + '-' + month + '-' + index;
-            const formatDay = year.toString()
-                + (month < 10 ? ('0' + month.toString()) : month.toString())
-                + (index.toString() < 10 ? ('0' + index.toString()) : index.toString())
-            const sql = "SELECT count(*) AS count FROM blocks WHERE type = 'p' AND created like '" + formatDay + "%'";
-            const sqlData = {stmt: sql}
-            await axios.post('/api/query/sql', sqlData)
-                .then(function (response) {
-                    let total = response.data.data[0].count
-                    data.push({day, total: total === 0 ? 0 : total});
-                })
+            if (new Date(day) > new Date(localDay)) {
+                data.push({day, total: 0})
+            } else {
+                const formatDay = year.toString()
+                    + (month < 10 ? ('0' + month.toString()) : month.toString())
+                    + (index.toString() < 10 ? ('0' + index.toString()) : index.toString())
+                const sql = "SELECT count(*) AS count FROM blocks WHERE type = 'p' AND created like '" + formatDay + "%'";
+                const sqlData = {stmt: sql}
+                await axios.post('/api/query/sql', sqlData)
+                    .then(function (response) {
+                        let total = response.data.data[0].count
+                        data.push({day, total: total === 0 ? 0 : total});
+                    })
+            }
+
         }
     }
     return data;
