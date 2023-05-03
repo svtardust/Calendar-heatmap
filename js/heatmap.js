@@ -1,10 +1,32 @@
 const dataChart = async () => {
+    let data = [];
     // 获去当前年
     const date = new Date();
     const year = date.getFullYear();
     const localDay = year + '-' + (date.getMonth() + 1) + '-' + date.getDay()
-    const data = [];
-    // 遍历循环当前日期
+    const heatmapData = JSON.parse(localStorage.getItem('calendar-heatmap-data'));
+    if (heatmapData === null || new Date(localDay) > new Date(heatmapData.now)) {
+        await formatDate(year, localDay, data)
+    } else {
+        const heatmapDate = heatmapData.now
+        const count = await queryCount(year, (date.getMonth() + 1), date.getDay())
+        const arrData = heatmapData.data;
+        const newData = []
+        data.slice(0,data.length)
+        for (let i = 0; i < arrData.length; i++) {
+            if (arrData[i].day === heatmapDate) {
+                newData.push({day: arrData[i].day, total: count})
+            } else {
+                newData.push(arrData[i])
+            }
+        }
+        data = newData
+    }
+    localStorage.setItem('calendar-heatmap-data', JSON.stringify({data, now: localDay}))
+    return data;
+};
+
+const formatDate = async (year, localDay, data) => {
     for (let index = 0; index < 12; index++) {
         const month = index + 1;
         const monthNumber = new Date(year, month, 0).getDate();
@@ -13,22 +35,25 @@ const dataChart = async () => {
             if (new Date(day) > new Date(localDay)) {
                 data.push({day, total: 0})
             } else {
-                const formatDay = year.toString()
-                    + (month < 10 ? ('0' + month.toString()) : month.toString())
-                    + (index.toString() < 10 ? ('0' + index.toString()) : index.toString())
-                const sql = "SELECT count(*) AS count FROM blocks WHERE type = 'p' AND created like '" + formatDay + "%'";
-                const sqlData = {stmt: sql}
-                await axios.post('/api/query/sql', sqlData)
-                    .then(function (response) {
-                        let total = response.data.data[0].count
-                        data.push({day, total: total === 0 ? 0 : total});
-                    })
+                const total = await queryCount(year, month, index)
+                data.push({day, total: total === 0 ? 0 : total});
             }
-
         }
     }
     return data;
-};
+}
+
+const queryCount = async (year, month, day) => {
+    const dateStr = year.toString()
+        + (month < 10 ? ('0' + month.toString()) : month.toString())
+        + (day.toString() < 10 ? ('0' + day.toString()) : day.toString())
+    const sql = "SELECT count(*) AS count FROM blocks WHERE type = 'p' AND created like +'" + dateStr + "%'";
+    const sqlData = {stmt: sql}
+    return await axios.post('/api/query/sql', sqlData)
+        .then(function (response) {
+            return response.data.data[0].count
+        })
+}
 
 const width = 1000;
 const height = 180;
@@ -75,7 +100,7 @@ monthBox
     .attr('x', (v, i) => {
         return monthScale(i);
     });
-const weeks = ['一', '二', '三', '四', '五', '六', '日'];
+const weeks = ['二', '四', '六'];
 // 绘制周坐标
 const weekBox = svg
     .append('g')
@@ -90,7 +115,7 @@ const weekScale = d3
 
 weekBox
     .selectAll('text')
-    // .data(weeks)
+    .data(weeks)
     .enter()
     .append('text')
     .text((v) => {
