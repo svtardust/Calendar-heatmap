@@ -1,0 +1,15 @@
+{
+  "name": "Calendar-heatmap",
+  "author": "svtardust",
+  "url": "https://github.com/svtardust/Calendar-heatmap.git",
+  "version": "0.0.4",
+  "displayName": {
+    "default": "日历热力图"
+  },
+  "description": {
+    "default": "思源笔记日历热力图"
+  },
+  "readme": {
+    "default": "README.md"
+  }
+}
