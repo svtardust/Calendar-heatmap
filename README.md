@@ -14,3 +14,8 @@
 > 截止到思源笔记版本2.8.8，思源笔记下载插件后需要手动启用
 
 `设置`-`集市`-`已下载`-`插件`
+
+
+## 通知
+Calendar-heatmap 版本v0.0.3（包含）以前为挂件版本，如果想用使用可以去https://github.com/svtardust/Calendar-heatmap/releases/tag/v0.0.3
+下载。
