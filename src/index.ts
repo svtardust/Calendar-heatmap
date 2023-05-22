@@ -37,8 +37,8 @@ export default class P extends Plugin {
       "click",
       async () => {
         if (con.style.visibility === "hidden") {
-          await this.heatmap();
           con.style.visibility = "visible";
+          await this.heatmap();
         } else {
           con.style.visibility = "hidden";
         }
