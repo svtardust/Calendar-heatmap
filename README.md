@@ -15,6 +15,9 @@
 
 `设置`-`集市`-`已下载`-`插件`
 
+## 关闭或禁用Calendar-heatmap后，图标仍显示怎么办？
+
+请重启思源笔记
 
 ## 通知
 Calendar-heatmap 版本v0.0.3（包含）以前为挂件版本，如果想用使用可以去https://github.com/svtardust/Calendar-heatmap/releases/tag/v0.0.3
