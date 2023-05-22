@@ -22,7 +22,7 @@ export default class P extends Plugin {
             top: 130px; left: 195px;  width: 1010px; height: 195px;
             box-shadow: 0 1px 1px darkgrey;
             opacity: 1;
-            background-color: aliceblue;
+            background-color: RGB(245,255,254);
             border: 0;
             border-radius: 8px;
             transform: translate(-15%, -50%);
@@ -153,14 +153,21 @@ export default class P extends Plugin {
         if (d.total === undefined || d.total === 0) {
           return "#EFEFEF";
         }
-        let t = d.total;
-        if (t > 0) {
-          if (t >= 180) {
-            t = 40;
+        let T = d.total;
+        let RB = 225;
+        let G = 255;
+        if (T > 0) {
+          if (T <= 225) {
+            RB = RB - T;
+          } else if (T > 225 && T <= 410) {
+            RB = 0;
+            G = G - (T - 225);
           } else {
-            t = 255 - t;
+            RB = 16;
+            G = 60;
           }
-          return "rgb(0," + t + ",0)";
+
+          return "RGB(" + RB + "," + G + "," + RB + ")";
         }
         return "#EFEFEF";
       })
