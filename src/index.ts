@@ -99,7 +99,7 @@ export default class P extends Plugin {
   }
 
   private async weekCoordinate(height, margin, monthBoxHeight, svg) {
-    const weeks = ["二", "四", "六"];
+    const weeks = ["日", "二", "四", "六"];
     const weekBox = svg
       .append("g")
       .attr(
