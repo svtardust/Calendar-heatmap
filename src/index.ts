@@ -1,4 +1,4 @@
-import {Plugin} from "siyuan";
+import { Plugin } from "siyuan";
 import axios from "axios";
 import * as d3 from "d3";
 
@@ -240,7 +240,7 @@ export default class CalHeatmap extends Plugin {
             data.slice(0, data.length);
             for (let i = 0; i < arrData.length; i++) {
                 if (arrData[i].day === heatmapDate) {
-                    newData.push({day: arrData[i].day, total: count});
+                    newData.push({ day: arrData[i].day, total: count });
                 } else {
                     newData.push(arrData[i]);
                 }
@@ -249,7 +249,7 @@ export default class CalHeatmap extends Plugin {
         }
         localStorage.setItem(
             "calendar-heatmap-data",
-            JSON.stringify({data, now: localDay})
+            JSON.stringify({ data, now: localDay })
         );
         return data;
     }
@@ -261,10 +261,10 @@ export default class CalHeatmap extends Plugin {
             for (let index = 1; index < monthNumber + 1; index++) {
                 const day = year + "-" + month + "-" + index;
                 if (new Date(day) > new Date(localDay)) {
-                    data.push({day, total: 0});
+                    data.push({ day, total: 0 });
                 } else {
                     const total = await this.queryCount(year, month, index);
-                    data.push({day, total: total === 0 ? 0 : total});
+                    data.push({ day, total: total === 0 ? 0 : total });
                 }
             }
         }
@@ -280,7 +280,7 @@ export default class CalHeatmap extends Plugin {
             "SELECT count(*) AS count FROM blocks WHERE type = 'p' AND created like +'" +
             dateStr +
             "%'";
-        const sqlData = {stmt: sql};
+        const sqlData = { stmt: sql };
         return await axios
             .post("/api/query/sql", sqlData)
             .then(function (response) {
