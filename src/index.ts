@@ -5,6 +5,13 @@ import * as d3 from "d3";
 export default class P extends Plugin {
     async onload() {
         const cal = document.getElementById("calendarHeatmapBtn");
+        this.customAddHtml(cal);
+        const btn = document.getElementById("calendarHeatmapBtn");
+        const con = document.getElementById("calendarHeatmapContent");
+        this.customEvent(btn, con);
+    }
+
+    private customAddHtml(cal: HTMLElement) {
         if (cal === null) {
             const barForward = document.getElementById("barForward");
             barForward.insertAdjacentHTML(
@@ -31,8 +38,9 @@ export default class P extends Plugin {
       </div>`
             );
         }
-        const btn = document.getElementById("calendarHeatmapBtn");
-        const con = document.getElementById("calendarHeatmapContent");
+    }
+
+    private customEvent(btn, con) {
         btn.addEventListener(
             "click",
             async (event) => {
@@ -88,7 +96,7 @@ export default class P extends Plugin {
         const monthScale = d3
             .scaleLinear()
             .domain([0, months().length])
-            .range([20, width - margin - weekBoxWidth -20]);
+            .range([20, width - margin - weekBoxWidth - 20]);
         monthBox
             .selectAll("text")
             .data(months())
@@ -162,11 +170,11 @@ export default class P extends Plugin {
                 }
                 let total = d.total;
                 if (total > 0) {
-                    if (total <= 30){
+                    if (total <= 30) {
                         return "#9be9a8"
-                    }else if (total <= 70){
+                    } else if (total <= 70) {
                         return "#40c463"
-                    }else if (total <= 120){
+                    } else if (total <= 120) {
                         return "#30a14e"
                     }
                     return "#216e39";
@@ -268,4 +276,5 @@ export default class P extends Plugin {
                 return response.data.data[0].count;
             });
     }
+
 }
