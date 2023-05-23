@@ -1,13 +1,14 @@
-import {Plugin} from "siyuan";
+import {Plugin, Menu} from "siyuan";
 import axios from "axios";
 import * as d3 from "d3";
 
 export default class CalHeatmap extends Plugin {
+
     async onload() {
         const cal = document.getElementById("calendarHeatmapBtn");
         CalHeatmap.customAddHtml(cal);
         const btn = document.getElementById("calendarHeatmapBtn");
-        const con = document.getElementById("calendarHeatmapContent");
+        const con = document.getElementById("openViewHeatmap");
         this.customEvent(btn, con);
     }
 
@@ -22,11 +23,11 @@ export default class CalHeatmap extends Plugin {
             barForward.insertAdjacentHTML(
                 "afterend",
                 ` <div  data-node-index="1">
-        <div id="calendarHeatmapContent"
+        <div id="openViewHeatmap"
           style="visibility: hidden;
             position: fixed;
             z-index: 10;
-            top: 130px; left: 195px;  width: 1010px; height: 195px;
+            top: 140px; left: 195px;  width: 1020px; height: 210px;
             box-shadow: 0 1px 1px darkgrey;
             opacity: 1;
             background-color: white;
@@ -34,6 +35,14 @@ export default class CalHeatmap extends Plugin {
             border-radius: 8px;
             transform: translate(-15%, -50%);
             overflow: auto;">
+            <div style="width: 1010px; height: 20px;">
+                <div id="customData" 
+                style="width: 600px; padding-left: 65px;
+                font-size: smaller;letter-spacing: 1px;font-weight: lighter;color: #93989f;
+                font-family: -apple-system,sans-serif"Segoe UI","Noto Sans",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";">
+                </div>
+            </div>
+            <div id="calendarHeatmapContent"></div>
         </div>
       </div>`
             );
@@ -74,6 +83,7 @@ export default class CalHeatmap extends Plugin {
         await this.monthCoordinate(width, margin, weekBoxWidth, svg);
         await this.weekCoordinate(height, margin, monthBoxHeight, svg);
         await this.dateSquares(height, margin, weekBoxWidth, monthBoxHeight, svg);
+        await this.localTotal();
     }
 
     private async monthCoordinate(width, margin, weekBoxWidth, svg) {
@@ -201,6 +211,7 @@ export default class CalHeatmap extends Plugin {
             }
             return d.day + "\n" + message;
         });
+
     }
 
     private async dataChart() {
@@ -277,4 +288,12 @@ export default class CalHeatmap extends Plugin {
             });
     }
 
+
+    private async localTotal() {
+        const date = new Date();
+        const day = date.getFullYear() + "年" + (date.getMonth() + 1) + "月" + date.getDate() + "日";
+        const count = await this.queryCount(date.getFullYear(), (date.getMonth() + 1), date.getDate());
+        document.getElementById("customData").innerText = "今日" + day + "，共创建" + count + "个内容块";
+
+    }
 }
