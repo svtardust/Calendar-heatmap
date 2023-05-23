@@ -88,7 +88,7 @@ export default class P extends Plugin {
         const monthScale = d3
             .scaleLinear()
             .domain([0, months().length])
-            .range([0, width - margin - weekBoxWidth + 10]);
+            .range([20, width - margin - weekBoxWidth -20]);
         monthBox
             .selectAll("text")
             .data(months())
@@ -142,10 +142,10 @@ export default class P extends Plugin {
                 "translate(" + (margin + weekBoxWidth) + ", " + (margin + 10) + ")"
             );
         // 设置方块间距
-        const cellMargin = 1.5;
+        const cellMargin = 4;
         // 计算方块大小
         const cellSize =
-            (height - margin - monthBoxHeight - cellMargin * 5 - 10) / 7;
+            (height - margin - monthBoxHeight - cellMargin * 6 - 10) / 7;
         // 方块列计数器
         let cellCol = 0;
         const cell = cellBox
@@ -158,25 +158,20 @@ export default class P extends Plugin {
             .attr("rx", 3)
             .attr("fill", function (d) {
                 if (d.total === undefined || d.total === 0) {
-                    return "#EFEFEF";
+                    return "#ebedf0";
                 }
-                let T = d.total;
-                let RB = 225;
-                let G = 255;
-                if (T > 0) {
-                    if (T <= 225) {
-                        RB = RB - T;
-                    } else if (T > 225 && T <= 410) {
-                        RB = 0;
-                        G = G - (T - 225);
-                    } else {
-                        RB = 16;
-                        G = 60;
+                let total = d.total;
+                if (total > 0) {
+                    if (total <= 30){
+                        return "#9be9a8"
+                    }else if (total <= 70){
+                        return "#40c463"
+                    }else if (total <= 120){
+                        return "#30a14e"
                     }
-
-                    return "RGB(" + RB + "," + G + "," + RB + ")";
+                    return "#216e39";
                 }
-                return "#EFEFEF";
+                return "#ebedf0";
             })
             .attr("x", (v, i) => {
                 if (i % 7 === 0) {
