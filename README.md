@@ -19,6 +19,10 @@
 
 请重启思源笔记
 
+## 如果使用过程中出现问题怎么办？
+
+请到 `https://github.com/svtardust/Calendar-heatmap/issues` 页面下点击New issue 提交问题及问题信息
+
 ## 通知
 Calendar-heatmap 版本v0.0.3（包含）以前为挂件版本，如果想用使用可以去https://github.com/svtardust/Calendar-heatmap/releases/tag/v0.0.3
 下载。
