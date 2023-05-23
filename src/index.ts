@@ -22,29 +22,29 @@ export default class CalHeatmap extends Plugin {
             );
             barForward.insertAdjacentHTML(
                 "afterend",
-                ` <div  data-node-index="1">
-        <div id="openViewHeatmap"
-          style="visibility: hidden;
-            position: fixed;
-            z-index: 10;
-            top: 140px; left: 195px;  width: 1020px; height: 210px;
-            box-shadow: 0 1px 1px darkgrey;
-            opacity: 1;
-            background-color: white;
-            border: 0;
-            border-radius: 8px;
-            transform: translate(-15%, -50%);
-            overflow: auto;">
-            <div style="width: 1010px; height: 20px;">
-                <div id="customData"
-                style="width: 600px; padding-left: 65px;
-                font-size: smaller;letter-spacing: 1px;font-weight: lighter;color: #93989f;
-                font-family: -apple-system,sans-serif"Segoe UI","Noto Sans",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";">
-                </div>
-            </div>
-            <div id="calendarHeatmapContent"></div>
-        </div>
-      </div>`
+                `<div data-node-index="1">
+                    <div id="openViewHeatmap"
+                    style="visibility: hidden;
+                        position: fixed;
+                        z-index: 10;
+                        top: 140px; left: 195px;
+                        box-shadow: 0 1px 1px darkgrey;
+                        opacity: 1;
+                        background-color: white;
+                        border: 0;
+                        border-radius: 8px;
+                        transform: translate(-15%, -50%);
+                        overflow: auto;">
+                        <div style="width: 1010px; height: 20px;">
+                            <div id="customData"
+                            style="width: 600px; padding-left: 65px;
+                            font-size: smaller;letter-spacing: 1px;font-weight: lighter;color: #93989f;
+                            font-family: -apple-system,sans-serif"Segoe UI","Noto Sans",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";">
+                            </div>
+                        </div>
+                        <div id="calendarHeatmapContent"></div>
+                    </div>
+                </div>`
             );
         }
     }
