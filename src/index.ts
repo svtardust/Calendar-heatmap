@@ -1,4 +1,4 @@
-import {Plugin, Menu} from "siyuan";
+import {Plugin} from "siyuan";
 import axios from "axios";
 import * as d3 from "d3";
 
@@ -36,7 +36,7 @@ export default class CalHeatmap extends Plugin {
             transform: translate(-15%, -50%);
             overflow: auto;">
             <div style="width: 1010px; height: 20px;">
-                <div id="customData" 
+                <div id="customData"
                 style="width: 600px; padding-left: 65px;
                 font-size: smaller;letter-spacing: 1px;font-weight: lighter;color: #93989f;
                 font-family: -apple-system,sans-serif"Segoe UI","Noto Sans",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";">
@@ -275,7 +275,7 @@ export default class CalHeatmap extends Plugin {
         const dateStr =
             year.toString() +
             (month < 10 ? "0" + month.toString() : month.toString()) +
-            (day.toString() < 10 ? "0" + day.toString() : day.toString());
+            (day < 10 ? "0" + day.toString() : day.toString());
         const sql =
             "SELECT count(*) AS count FROM blocks WHERE type = 'p' AND created like +'" +
             dateStr +
