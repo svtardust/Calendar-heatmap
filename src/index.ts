@@ -2,16 +2,16 @@ import {Plugin} from "siyuan";
 import axios from "axios";
 import * as d3 from "d3";
 
-export default class P extends Plugin {
+export default class CalHeatmap extends Plugin {
     async onload() {
         const cal = document.getElementById("calendarHeatmapBtn");
-        this.customAddHtml(cal);
+        CalHeatmap.customAddHtml(cal);
         const btn = document.getElementById("calendarHeatmapBtn");
         const con = document.getElementById("calendarHeatmapContent");
         this.customEvent(btn, con);
     }
 
-    private customAddHtml(cal: HTMLElement) {
+    private static customAddHtml(cal: HTMLElement) {
         if (cal === null) {
             const barForward = document.getElementById("barForward");
             barForward.insertAdjacentHTML(
@@ -29,7 +29,7 @@ export default class P extends Plugin {
             top: 130px; left: 195px;  width: 1010px; height: 195px;
             box-shadow: 0 1px 1px darkgrey;
             opacity: 1;
-            background-color: RGB(245,255,254);
+            background-color: white;
             border: 0;
             border-radius: 8px;
             transform: translate(-15%, -50%);
