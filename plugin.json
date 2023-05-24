@@ -7,7 +7,7 @@
     "default": "日历热力图"
   },
   "description": {
-    "default": "思源笔记日历热力图"
+    "default": "日历热力图插件,可统计当年每日创建的多少内容块"
   },
   "readme": {
     "default": "README.md"
