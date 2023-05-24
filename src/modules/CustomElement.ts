@@ -31,7 +31,6 @@ export function addElement() {
                     font-family: -apple-system,sans-serif"Segoe UI","Noto Sans",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";">
                     </div>
                     <div id="calendarHeatmapRefresh" 
-                    class="toolbar__item b3-tooltips b3-tooltips__sw"
                     style="float: left; 
                             height: 20px; 
                             width:25px; 
