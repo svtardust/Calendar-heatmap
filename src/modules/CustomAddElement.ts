@@ -1,6 +1,6 @@
 export function customAddHtml() {
-  const cal = document.getElementById("calendarHeatmapBtn");
-  if (cal === null) {
+  const calendarHeatmapBtn = document.getElementById("calendarHeatmapBtn");
+  if (calendarHeatmapBtn === null) {
     const barForward = document.getElementById("barForward");
     barForward.insertAdjacentHTML(
       "afterend",
