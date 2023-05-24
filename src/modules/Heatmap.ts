@@ -179,7 +179,7 @@ const dataChart = async () => {
   localStorage.setItem(
     "calendar-heatmap-data",
     JSON.stringify({ data, now: localDay })
-  ); 
+  );
   return data;
 }
 const formatDate = async (year: number, localDay: string, data: any[]) => {
@@ -205,7 +205,7 @@ export async function queryCount(year: number, month: number, day: number) {
     (month < 10 ? "0" + month.toString() : month.toString()) +
     (day < 10 ? "0" + day.toString() : day.toString());
   const sql =
-    `SELECT count(*) AS count FROM blocks WHERE type = 'p' AND created like '`+ dateStr+"%'";
+    `SELECT count(*) AS count FROM blocks WHERE type = 'p' AND created like '` + dateStr + "%'";
   const sqlData = { stmt: sql };
   return await axios
     .post("/api/query/sql", sqlData)
@@ -220,4 +220,8 @@ const localTotal = async () => {
   const count = await queryCount(date.getFullYear(), (date.getMonth() + 1), date.getDate());
   document.getElementById("customData").innerText = "今日" + day + "，共创建" + count + "个内容块";
 
+}
+
+export function removeLocalData() {
+  localStorage.removeItem('calendar-heatmap-data');
 }

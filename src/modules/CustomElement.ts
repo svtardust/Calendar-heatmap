@@ -1,4 +1,5 @@
-export function customAddHtml() {
+
+export function addElement() {
   const calendarHeatmapBtn = document.getElementById("calendarHeatmapBtn");
   if (calendarHeatmapBtn === null) {
     const barForward = document.getElementById("barForward");
@@ -48,4 +49,9 @@ export function customAddHtml() {
             </div>`
     );
   }
+}
+
+export function removeElement() {
+  document.getElementById('openViewHeatmap').remove();
+  document.getElementById('calendarHeatmapBtn').remove();
 }

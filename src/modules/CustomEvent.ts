@@ -1,34 +1,42 @@
 import { heatmap } from "./Heatmap";
 
-export function customEvent() {
+
+const calendarHeatmaprefresh = async (event) => {
+    event.stopPropagation();
+    localStorage.removeItem("calendar-heatmap-data");
+    await heatmap();
+}
+
+const calendarHeatmapButton = async (event) => {
+    event.stopPropagation();
     const openViewHeatmap = document.getElementById("openViewHeatmap");
 
-    async function calendarrefresh(event) {
-        event.stopPropagation();
-        localStorage.removeItem("calendar-heatmap-data");
+    if (openViewHeatmap.style.visibility === "hidden") {
+        openViewHeatmap.style.visibility = "visible";
         await heatmap();
+    } else {
+        openViewHeatmap.style.visibility = "hidden";
     }
+}
 
-    async function eventHeatmapButton(event) {
+const windowRadiusClose = (event) => {
+    if (event.clientX <= 50 || event.clientX >= 1048 || event.clientY >= 235) {
         event.stopPropagation();
-        if (openViewHeatmap.style.visibility === "hidden") {
-            openViewHeatmap.style.visibility = "visible";
-            await heatmap();
-        } else {
+        const openViewHeatmap = document.getElementById("openViewHeatmap");
+        if (openViewHeatmap.style.visibility === "visible") {
             openViewHeatmap.style.visibility = "hidden";
         }
     }
+}
 
-    function windowRadiusClose(event) {
-        if (event.clientX <= 50 || event.clientX >= 1048 || event.clientY >= 235) {
-            event.stopPropagation();
-            if (openViewHeatmap.style.visibility === "visible") {
-                openViewHeatmap.style.visibility = "hidden";
-            }
-        }
-    }
-    document.getElementById("calendarHeatmapRefresh").addEventListener("click", calendarrefresh);
-    document.getElementById("calendarHeatmapBtn").addEventListener("click", eventHeatmapButton);
-
+export function addEvent() {
+    document.getElementById("calendarHeatmapBtn").addEventListener("click", calendarHeatmapButton);
+    document.getElementById("calendarHeatmapRefresh").addEventListener("click", calendarHeatmaprefresh);
     window.addEventListener("click", windowRadiusClose);
+}
+
+export function removeEvent() {
+    window.removeEventListener("click", windowRadiusClose)
+    document.getElementById("calendarHeatmapRefresh").addEventListener("click", calendarHeatmaprefresh);
+    document.getElementById("calendarHeatmapBtn").removeEventListener('click', calendarHeatmapButton)
 }
