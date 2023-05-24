@@ -9,8 +9,7 @@ export function customAddHtml() {
     );
     barForward.insertAdjacentHTML(
       "afterend",
-      `<div data-node-index="1">
-            <div id="openViewHeatmap"
+      `<div id="openViewHeatmap"
             style="visibility: hidden;
                 position: fixed;
                 z-index: 10;
@@ -46,8 +45,7 @@ export function customAddHtml() {
                 </div>
                 <div id="calendarHeatmapContent">
                 </div>
-            </div>
-        </div>`
+            </div>`
     );
   }
 }
