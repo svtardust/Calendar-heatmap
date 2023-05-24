@@ -205,9 +205,7 @@ export async function queryCount(year: number, month: number, day: number) {
     (month < 10 ? "0" + month.toString() : month.toString()) +
     (day < 10 ? "0" + day.toString() : day.toString());
   const sql =
-    "SELECT count(*) AS count FROM blocks WHERE type = 'p' AND created like +'" +
-    dateStr +
-    "%'";
+    `SELECT count(*) AS count FROM blocks WHERE type = 'p' AND created like '`+ dateStr+"%'";
   const sqlData = { stmt: sql };
   return await axios
     .post("/api/query/sql", sqlData)
