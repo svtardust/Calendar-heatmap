@@ -52,6 +52,11 @@ export function addcalendarHeatmapViewElement() {
     )
   }
 }
+let isdailyNote = false;
+const config = localStorage.getItem('calendar-heatmap-config')
+if (config != null) {
+ isdailyNote = JSON.parse(config).isdailyNote;
+}
 
 export const addSettingElement = `<div class="config__tab-container">
                                     <lable class="fn__flex b3-label">
@@ -60,7 +65,7 @@ export const addSettingElement = `<div class="config__tab-container">
                                         <div class="b3-label__text">启用后将只统计当年归属于daily note中的内容块</div>
                                         <span class="fn__space"></span>
                                       </div>
-                                      <input class="b3-switch fn__flex-center" id="calendarHeatmapConfigCheckbox" type="checkbox">
+                                      <input class="b3-switch fn__flex-center" id="calendarHeatmapConfigCheckbox" type="checkbox" ${isdailyNote === true ? 'checked' : null} >
                                     </lable>
                                     <label class="b3-label fn__flex">
                                       <div class="fn__flex-1">

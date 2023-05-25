@@ -28,6 +28,30 @@ const windowRadiusClose = (event) => {
   }
 }
 
+const calendarHeatmapConfigCheckd = (event) => {
+  const checked = event.target.checked
+  const config = JSON.parse(localStorage.getItem('calendar-heatmap-config'))
+  if (checked) {
+    if (config === null) {
+      localStorage.setItem('calendar-heatmap-config', JSON.stringify({ isdailyNote: true }))
+    } else {
+      const { ignore } = config
+      console.log(ignore)
+      localStorage.setItem('calendar-heatmap-config', JSON.stringify({ isdailyNote: true, ignore }))
+    }
+  } else {
+    if (config === null) {
+      localStorage.setItem('calendar-heatmap-config', JSON.stringify({ isdailyNote: false }))
+    } else {
+      const { ignore } = config
+      localStorage.setItem('calendar-heatmap-config', JSON.stringify({ isdailyNote: false, ignore }))
+    }
+  }
+}
+export const calendarHeatmapConfig = (dialog) => {
+  dialog.element.querySelector('#calendarHeatmapConfigCheckbox').addEventListener('click', calendarHeatmapConfigCheckd)
+}
+
 export function addEvent() {
   document.getElementById('calendarHeatmapButton').addEventListener('click', calendarHeatmapButton)
   document.getElementById('calendarHeatmapRefresh').addEventListener('click', calendarHeatmaprefresh)
