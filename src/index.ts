@@ -1,13 +1,13 @@
 import { Plugin } from 'siyuan'
-import { addElement, removeElement } from './modules/CustomElement'
+import { addcalendarHeatmapButtonElement, addcalendarHeatmapViewElement, removeElement } from './modules/CustomElement'
 import { addEvent, removeEvent } from './modules/CustomEvent'
 import { removeLocalData } from './modules/Heatmap'
 import { config } from './modules/CustomConfig'
 
 export default class CalHeatmap extends Plugin {
-
   onload() {
-    addElement()
+    addcalendarHeatmapButtonElement()
+    addcalendarHeatmapViewElement()
     addEvent()
   }
 
