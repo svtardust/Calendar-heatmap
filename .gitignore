@@ -12,5 +12,4 @@ scripts
 .prettierignore
 *.cjs
 .eslintignore
-.github
 
