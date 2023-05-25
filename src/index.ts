@@ -1,18 +1,23 @@
-import { Plugin } from "siyuan";
-import { addElement, removeElement } from './modules/CustomElement';
-import { addEvent, removeEvent } from "./modules/CustomEvent";
+import { Plugin } from 'siyuan'
+import { addElement, removeElement } from './modules/CustomElement'
+import { addEvent, removeEvent } from './modules/CustomEvent'
 import { removeLocalData } from './modules/Heatmap'
+import { config } from './modules/CustomConfig'
 
 export default class CalHeatmap extends Plugin {
 
-    onload() {
-        addElement();
-        addEvent();
-    }
+  onload() {
+    addElement()
+    addEvent()
+  }
 
-    onunload() {
-        removeEvent();
-        removeElement();
-        removeLocalData();
-    }
+  onunload() {
+    removeEvent()
+    removeElement()
+    removeLocalData()
+  }
+
+  openSetting() {
+    config()
+  }
 }
