@@ -2,8 +2,8 @@ export function addcalendarHeatmapButtonElement() {
   if (document.getElementById('calendarHeatmapButton') === null) {
     document.getElementById('barForward').insertAdjacentHTML(
       'afterend',
-      `<div id="calendarHeatmapButton" class="toolbar__item b3-tooltips b3-tooltips__sw" aria-label="calendar-heatmap" >'
-          '<span style="background-color: green;width: 15px;height: 15px;border-radius: 5px"></span>
+      `<div id="calendarHeatmapButton" class="toolbar__item b3-tooltips b3-tooltips__sw" aria-label="calendar-heatmap" >
+          <span style="background-color: green;width: 15px;height: 15px;border-radius: 5px"></span>
         </div>`
     )
   }
