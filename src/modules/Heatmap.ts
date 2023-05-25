@@ -138,7 +138,7 @@ const dataChart = async () => {
     await formatDate(year, localDay, data)
   } else {
     const heatmapDate = heatmapData.now
-    const count = queryCount(year, date.getMonth() + 1, date.getDate())
+    const count = await queryCount(year, date.getMonth() + 1, date.getDate())
     const arrData = heatmapData.data
     const newData = []
     data.slice(0, data.length)
@@ -187,9 +187,9 @@ export async function queryCount(year: number, month: number, day: number) {
       const arrData = ignore.split(',')
       for (let i = 0; i < arrData.length; i++) {
         const element = arrData[i]
-        sql = sql + `hpath LIKE '/${element}%' ${i === arrData.length - 1 ? '' : 'OR'}`
+        sql = sql + `hpath LIKE '/${element}%' ${i === arrData.length - 1 ? '' : 'OR '}`
       }
-      sql = sql + `) AND created like '${dateStr+"%"}'`
+      sql = sql + `) AND created like '${dateStr + '%'}'`
     } else {
       sql = `SELECT count(*) AS count FROM blocks WHERE type = 'p' AND created like '` + dateStr + "%'"
     }
