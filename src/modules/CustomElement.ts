@@ -60,7 +60,7 @@ export const addSettingElement = `<div class="config__tab-container">
                                         <div class="b3-label__text">启用后将只统计当年归属于daily note的内容块</div>
                                         <span class="fn__space"></span>
                                       </div>
-                                      <input class="b3-switch fn__flex-center" id="cald" type="checkbox">
+                                      <input class="b3-switch fn__flex-center" id="calendarHeatmapConfigCheckbox" type="checkbox">
                                     </lable>
                                     </div>`
 
