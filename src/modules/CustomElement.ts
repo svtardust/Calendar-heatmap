@@ -61,7 +61,7 @@ if (config != null) {
   ignore = objConfig.ignore
 }
 
-export const addSettingElement = `<div class="config__tab-container">
+export const addSettingElement = `<div class="config__tab-container" id="heatmapSettingsDialog">
                                     <lable class="fn__flex b3-label">
                                       <div class="fn__flex-1">
                                         daily note
@@ -83,6 +83,7 @@ export const addSettingElement = `<div class="config__tab-container">
                                   </div>`
 
 export function removeElement() {
+  document.getElementById('heatmapSettingsDialog').remove()
   document.getElementById('openViewHeatmap').remove()
   document.getElementById('calendarHeatmapButton').remove()
 }

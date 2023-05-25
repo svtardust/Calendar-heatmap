@@ -1,4 +1,3 @@
-import { test } from 'node:test'
 import { heatmap } from './Heatmap'
 
 const calendarHeatmaprefresh = async (event) => {
@@ -68,8 +67,8 @@ export function addEvent() {
 
 export function removeEvent() {
   window.removeEventListener('click', windowRadiusClose)
-  document.getElementById('calendarHeatmapRefresh').addEventListener('click', calendarHeatmaprefresh)
-  document.getElementById('calendarHeatmapButton').removeEventListener('click', calendarHeatmapButton)
   document.getElementById('calendarHeatmapConfigCheckbox').removeEventListener('click', calendarHeatmapConfigCheckd)
   document.getElementById('calendarHeatmapConfigText').removeEventListener('blur', calendarHeatmapConfigtextarea)
+  document.getElementById('calendarHeatmapRefresh').addEventListener('click', calendarHeatmaprefresh)
+  document.getElementById('calendarHeatmapButton').removeEventListener('click', calendarHeatmapButton)
 }
