@@ -77,8 +77,7 @@ export const addSettingElement = `<div class="config__tab-container">
                                         <div class="fn__hr"></div>
                                         <textarea class="b3-text-field fn__block" 
                                                   id="calendarHeatmapConfigText" 
-                                                  style="height: 50px;" placeholder="请输入需要忽略的文档全名称,并且用逗号隔开">${ignore != '' && ignore != undefined ? ignore : ''}
-                                        </textarea>
+                                                  style="height: 50px;" placeholder="请输入需要忽略的文档全名称,并且用逗号隔开">${ignore != '' && ignore != undefined ? ignore : ''}</textarea>
                                       </div>
                                     </label>
                                   </div>`

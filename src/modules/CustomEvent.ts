@@ -1,3 +1,4 @@
+import { test } from 'node:test'
 import { heatmap } from './Heatmap'
 
 const calendarHeatmaprefresh = async (event) => {
@@ -27,29 +28,36 @@ const windowRadiusClose = (event) => {
     }
   }
 }
-
+const localConfig = localStorage.getItem('calendar-heatmap-config')
 const calendarHeatmapConfigCheckd = (event) => {
   const checked = event.target.checked
-  const config = JSON.parse(localStorage.getItem('calendar-heatmap-config'))
   if (checked) {
-    if (config === null) {
+    if (localConfig === null || localConfig === undefined) {
       localStorage.setItem('calendar-heatmap-config', JSON.stringify({ isdailyNote: true }))
     } else {
-      const { ignore } = config
-      console.log(ignore)
+      const { ignore } = JSON.parse(localConfig)
       localStorage.setItem('calendar-heatmap-config', JSON.stringify({ isdailyNote: true, ignore }))
     }
   } else {
-    if (config === null) {
+    if (localConfig === null || localConfig === undefined) {
       localStorage.setItem('calendar-heatmap-config', JSON.stringify({ isdailyNote: false }))
     } else {
-      const { ignore } = config
+      const { ignore } = JSON.parse(localConfig)
       localStorage.setItem('calendar-heatmap-config', JSON.stringify({ isdailyNote: false, ignore }))
     }
   }
 }
+
+const calendarHeatmapConfigtextarea = (event) => {
+  const text = event.target.value
+  if (text != null) {
+    localStorage.setItem('calendar-heatmap-config', JSON.stringify({ checked: false, ignore: text }))
+  }
+}
+
 export const calendarHeatmapConfig = (dialog) => {
   dialog.element.querySelector('#calendarHeatmapConfigCheckbox').addEventListener('click', calendarHeatmapConfigCheckd)
+  dialog.element.querySelector('#calendarHeatmapConfigText').addEventListener('blur', calendarHeatmapConfigtextarea)
 }
 
 export function addEvent() {
