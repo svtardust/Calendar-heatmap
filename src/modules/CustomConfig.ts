@@ -5,7 +5,7 @@ export function config() {
   const dialog = new Dialog({
     title: this.name,
     content: addSettingElement,
-    width: '900px',
-    height: '600px',
+    width: '800px',
+    height: '400px',
   })
 }
