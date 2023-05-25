@@ -173,20 +173,23 @@ const formatDate = async (year: number, localDay: string, data: any[]) => {
 
 export async function queryCount(year: number, month: number, day: number) {
   const dateStr = year.toString() + (month < 10 ? '0' + month.toString() : month.toString()) + (day < 10 ? '0' + day.toString() : day.toString())
-  const config = localStorage.getItem('calendar-heatmap-config')
+  const localConfig = localStorage.getItem('calendar-heatmap-config')
   let sql = ''
-  if (config === null) {
+  if (localConfig === null) {
     sql = `SELECT count(*) AS count FROM blocks WHERE type = 'p' AND created like '` + dateStr + "%'"
   } else {
-    const { isdailyNote, ignore } = JSON.parse(config)
+    const { isdailyNote, ignore } = JSON.parse(localConfig)
+
     if (isdailyNote === true) {
-      sql =
-        `SELECT COUNT(*) AS count FROM blocks WHERE TYPE = 'p'
-        AND hpath IN (SELECT hpath FROM blocks WHERE hpath LIKE "/daily note%") 
-        AND created like '` +
-        dateStr +
-        "%'"
-    } else if (ignore !== null || ignore !== undefined) {
+      sql = `SELECT COUNT(*) AS count FROM blocks WHERE TYPE = 'p' AND hpath IN (SELECT hpath FROM blocks WHERE hpath LIKE '/daily note%') AND created like '${dateStr + '%'}'`
+    } else if (ignore !== null && ignore !== undefined && ignore != '') {
+      sql = `SELECT COUNT(*) AS count FROM blocks WHERE TYPE = 'p' AND hpath NOT IN (SELECT hpath FROM blocks WHERE `
+      const arrData = ignore.split(',')
+      for (let i = 0; i < arrData.length; i++) {
+        const element = arrData[i]
+        sql = sql + `hpath LIKE '/${element}%' ${i === arrData.length - 1 ? '' : 'OR'}`
+      }
+      sql = sql + `) AND created like '${dateStr+"%"}'`
     } else {
       sql = `SELECT count(*) AS count FROM blocks WHERE type = 'p' AND created like '` + dateStr + "%'"
     }

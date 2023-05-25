@@ -52,10 +52,13 @@ export function addcalendarHeatmapViewElement() {
     )
   }
 }
-let isdailyNote = false;
+let isdailyNote = false
+let ignore = null
 const config = localStorage.getItem('calendar-heatmap-config')
 if (config != null) {
- isdailyNote = JSON.parse(config).isdailyNote;
+  const objConfig = JSON.parse(config)
+  isdailyNote = objConfig.isdailyNote
+  ignore = objConfig.ignore
 }
 
 export const addSettingElement = `<div class="config__tab-container">
@@ -69,10 +72,12 @@ export const addSettingElement = `<div class="config__tab-container">
                                     </lable>
                                     <label class="b3-label fn__flex">
                                       <div class="fn__flex-1">
-                                          忽略统计文件
-                                          <div class="b3-label__text">请输入所需忽略的文件,并用英文逗号隔开</div>
-                                          <div class="fn__hr"></div>
-                                          <textarea class="b3-text-field fn__block" id="calendarHeatmapConfigText"></textarea>
+                                        忽略统计文件
+                                        <div class="b3-label__text">请输入所需忽略的文件,并用英文逗号隔开</div>
+                                        <div class="fn__hr"></div>
+                                        <textarea class="b3-text-field fn__block" 
+                                                  id="calendarHeatmapConfigText" 
+                                                  style="height: 50px;" placeholder="请输入需要忽略的文档全名称,并且用逗号隔开">${ignore != '' && ignore != undefined ? ignore : ''}</textarea>
                                       </div>
                                     </label>
                                   </div>`
