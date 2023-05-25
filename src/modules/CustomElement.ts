@@ -57,12 +57,20 @@ export const addSettingElement = `<div class="config__tab-container">
                                     <lable class="fn__flex b3-label">
                                       <div class="fn__flex-1">
                                         daily note
-                                        <div class="b3-label__text">启用后将只统计当年归属于daily note的内容块</div>
+                                        <div class="b3-label__text">启用后将只统计当年归属于daily note中的内容块</div>
                                         <span class="fn__space"></span>
                                       </div>
                                       <input class="b3-switch fn__flex-center" id="calendarHeatmapConfigCheckbox" type="checkbox">
                                     </lable>
-                                    </div>`
+                                    <label class="b3-label fn__flex">
+                                      <div class="fn__flex-1">
+                                          忽略统计文件
+                                          <div class="b3-label__text">请输入所需忽略的文件,并用英文逗号隔开</div>
+                                          <div class="fn__hr"></div>
+                                          <textarea class="b3-text-field fn__block" id="calendarHeatmapConfigText"></textarea>
+                                      </div>
+                                    </label>
+                                  </div>`
 
 export function removeElement() {
   document.getElementById('openViewHeatmap').remove()
