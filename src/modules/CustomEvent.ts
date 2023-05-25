@@ -70,4 +70,6 @@ export function removeEvent() {
   window.removeEventListener('click', windowRadiusClose)
   document.getElementById('calendarHeatmapRefresh').addEventListener('click', calendarHeatmaprefresh)
   document.getElementById('calendarHeatmapButton').removeEventListener('click', calendarHeatmapButton)
+  document.getElementById('calendarHeatmapConfigCheckbox').removeEventListener('click', calendarHeatmapConfigCheckd)
+  document.getElementById('calendarHeatmapConfigText').removeEventListener('blur', calendarHeatmapConfigtextarea)
 }
