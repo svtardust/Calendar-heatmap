@@ -33,20 +33,11 @@ const windowRadiusClose = (event) => {
 const calendarHeatmapConfigCheckd = (event) => {
   const checked = event.target.checked
   if (checked) {
-    if (localConfig === null || localConfig === undefined) {
-      localStorage.setItem('calendar-heatmap-config', JSON.stringify({ isdailyNote: true }))
-    } else {
-      const { ignore } = JSON.parse(localConfig)
-      localStorage.setItem('calendar-heatmap-config', JSON.stringify({ isdailyNote: true, ignore }))
-    }
+    localStorage.setItem('calendar-heatmap-config', JSON.stringify({ isdailyNote: true }))
     document.getElementById('calendarHeatmapConfigCheckbox').checked = true
+    document.getElementById('calendarHeatmapConfigText').value = ''
   } else {
-    if (localConfig === null || localConfig === undefined) {
-      localStorage.setItem('calendar-heatmap-config', JSON.stringify({ isdailyNote: false }))
-    } else {
-      const { ignore } = JSON.parse(localConfig)
-      localStorage.setItem('calendar-heatmap-config', JSON.stringify({ isdailyNote: false, ignore }))
-    }
+    localStorage.setItem('calendar-heatmap-config', JSON.stringify({ isdailyNote: false }))
     document.getElementById('calendarHeatmapConfigCheckbox').checked = false
   }
 }
