@@ -51,11 +51,12 @@ jobs:
       # Build for production, 这一步会生成一个 package.zip
       - name: Build for production
         run: pnpm build
-
+      
+      # 自动打包
       - name: Release
         uses: ncipollo/release-action@v1
         with:
-          # 如果版本已经存在，我们是否应该更新它。默认值为 false。
+          # 如果版本已经存在，我们是否更新它。默认值为 false。
           allowUpdates: true
           # 读取或上传产出文件错误时是否应该使构建失败。
           artifactErrorsFailBuild: true
