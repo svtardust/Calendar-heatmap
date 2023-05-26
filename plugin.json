@@ -2,7 +2,7 @@
   "name": "Calendar-heatmap",
   "author": "svtardust",
   "url": "https://github.com/svtardust/Calendar-heatmap.git",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "displayName": {
     "default": "日历热力图"
   },
