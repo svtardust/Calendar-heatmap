@@ -13,7 +13,7 @@
 
 3. 可忽略文件统计(热力图设置中启用此选项)
 
-> **当只想统计日记时，可启用日记模式，该模式启用后，热力图需要手动刷新方可正常显示，当想忽略文件时，可按照案例一和案例二操作，同时会关闭日记模式，同样需要手动刷新热力图。而当再次开启日记模式时，忽略文件区域会被清空**
+> **当只想统计日记时，可启用日记模式，该模式启用后，忽略文件区域会被清空，热力图需要手动刷新方可正常显示，当想忽略文件时，可按照案例一和案例二操作，同时会关闭日记模式，同样需要手动刷新热力图。**
 
 案例一：
 
@@ -68,10 +68,10 @@ test
 
 ## 如果使用过程中出现问题怎么办？
 
-如果使用过程中出现与本插件相关的错误，请到 `https://github.com/svtardust/Calendar-heatmap/issues` 页面下点击New issue 提交问题及问题信息
+如果使用过程中出现与本插件相关的错误，请到 `https://githubfast.com/svtardust/Calendar-heatmap/issues` 页面下点击New issue 提交问题及问题信息
 
 ## 通知
-Calendar-heatmap 版本v0.0.3（包含）以前为挂件版本，如果想用使用可以去https://github.com/svtardust/Calendar-heatmap/releases/tag/v0.0.3
+Calendar-heatmap 版本v0.0.3（包含）以前为挂件版本，如果想用使用可以去https://githubfast.com/svtardust/Calendar-heatmap/releases/tag/v0.0.3
 下载。
 
 ## 变更日志
