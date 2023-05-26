@@ -55,8 +55,12 @@ jobs:
       - name: Release
         uses: ncipollo/release-action@v1
         with:
+          # 如果版本已经存在，我们是否应该更新它。默认值为 false。
           allowUpdates: true
+          # 读取或上传产出文件错误时是否应该使构建失败。
           artifactErrorsFailBuild: true
+          # 表示要上传到版本的产出文件。 这可以是单个路径或以逗号分隔的路径列表，（可以理解为打包的包文件名称）
           artifacts: 'package.zip'
           token: ${{ secrets.RELEASE_TOKEN }}
-          prerelease: true
+          # 是否启用预发布版本
+          prerelease: false
