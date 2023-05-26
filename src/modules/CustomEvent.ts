@@ -50,6 +50,8 @@ const calendarHeatmapConfigCheckd = (event) => {
 const calendarHeatmapConfigtextarea = (event) => {
   const text = event.target.value
   if (text != null) {
+    // https://github.com/svtardust/Calendar-heatmap/issues/9
+    document.getElementById('calendarHeatmapConfigCheckbox').checked = false
     localStorage.setItem('calendar-heatmap-config', JSON.stringify({ checked: false, ignore: text }))
   }
 }
