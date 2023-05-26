@@ -1,5 +1,7 @@
 import { heatmap } from './Heatmap'
 
+const localConfig = localStorage.getItem('calendar-heatmap-config')
+
 const calendarHeatmaprefresh = async (event) => {
   event.stopPropagation()
   localStorage.removeItem('calendar-heatmap-data')
@@ -27,7 +29,7 @@ const windowRadiusClose = (event) => {
     }
   }
 }
-const localConfig = localStorage.getItem('calendar-heatmap-config')
+
 const calendarHeatmapConfigCheckd = (event) => {
   const checked = event.target.checked
   if (checked) {
@@ -37,6 +39,7 @@ const calendarHeatmapConfigCheckd = (event) => {
       const { ignore } = JSON.parse(localConfig)
       localStorage.setItem('calendar-heatmap-config', JSON.stringify({ isdailyNote: true, ignore }))
     }
+    document.getElementById('calendarHeatmapConfigCheckbox').checked = true
   } else {
     if (localConfig === null || localConfig === undefined) {
       localStorage.setItem('calendar-heatmap-config', JSON.stringify({ isdailyNote: false }))
@@ -44,6 +47,7 @@ const calendarHeatmapConfigCheckd = (event) => {
       const { ignore } = JSON.parse(localConfig)
       localStorage.setItem('calendar-heatmap-config', JSON.stringify({ isdailyNote: false, ignore }))
     }
+    document.getElementById('calendarHeatmapConfigCheckbox').checked = false
   }
 }
 
@@ -58,7 +62,7 @@ const calendarHeatmapConfigtextarea = (event) => {
 
 export const calendarHeatmapConfig = (dialog) => {
   dialog.element.querySelector('#calendarHeatmapConfigCheckbox').addEventListener('click', calendarHeatmapConfigCheckd)
-  dialog.element.querySelector('#calendarHeatmapConfigText').addEventListener('blur', calendarHeatmapConfigtextarea)
+  dialog.element.querySelector('#calendarHeatmapConfigText').addEventListener('input', calendarHeatmapConfigtextarea)
 }
 
 export function addEvent() {
@@ -70,7 +74,7 @@ export function addEvent() {
 export function removeEvent() {
   window.removeEventListener('click', windowRadiusClose)
   document.getElementById('calendarHeatmapConfigCheckbox').removeEventListener('click', calendarHeatmapConfigCheckd)
-  document.getElementById('calendarHeatmapConfigText').removeEventListener('blur', calendarHeatmapConfigtextarea)
+  document.getElementById('calendarHeatmapConfigText').removeEventListener('input', calendarHeatmapConfigtextarea)
   document.getElementById('calendarHeatmapRefresh').removeEventListener('click', calendarHeatmaprefresh)
   document.getElementById('calendarHeatmapButton').removeEventListener('click', calendarHeatmapButton)
 }
