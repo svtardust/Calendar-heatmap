@@ -36,7 +36,7 @@ export function addcalendarHeatmapViewElement() {
                 </div>
                 <div id="calendarHeatmapRefresh" 
                 style="float: left; 
-                        height: 20px; 
+                        height: 25px; 
                         width:25px; 
                         margin-left: 280px; 
                         line-height: 50px; 
