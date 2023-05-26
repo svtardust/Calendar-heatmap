@@ -63,7 +63,7 @@ if (config != null) {
 export const addSettingElement = `<div class="config__tab-container" id="heatmapSettingsDialog">
                                     <lable class="fn__flex b3-label">
                                       <div class="fn__flex-1">
-                                        daily note
+                                      日记
                                         <div class="b3-label__text">启用后将只统计当年归属于daily note中的内容块</div>
                                         <span class="fn__space"></span>
                                       </div>
