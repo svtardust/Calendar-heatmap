@@ -211,3 +211,7 @@ const localTotal = async () => {
 export function removeLocalData() {
   localStorage.removeItem('calendar-heatmap-data')
 }
+
+export function onLoadData() {
+  dataChart()
+}

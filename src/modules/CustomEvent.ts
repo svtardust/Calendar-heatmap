@@ -1,7 +1,5 @@
 import { heatmap } from './Heatmap'
 
-const localConfig = localStorage.getItem('calendar-heatmap-config')
-
 const calendarHeatmaprefresh = async (event) => {
   event.stopPropagation()
   localStorage.removeItem('calendar-heatmap-data')
