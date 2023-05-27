@@ -64,4 +64,4 @@ jobs:
           artifacts: 'package.zip'
           token: ${{ secrets.RELEASE_TOKEN }}
           # 是否启用预发布版本
-          prerelease: true
+          prerelease: false
