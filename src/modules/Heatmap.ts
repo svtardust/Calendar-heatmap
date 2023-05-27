@@ -1,5 +1,5 @@
-import axios from 'axios'
 import * as d3 from 'd3'
+import { fetchSyncPost } from 'siyuan'
 
 export async function heatmap() {
   const width = 1000
@@ -196,8 +196,8 @@ export async function queryCount(year: number, month: number, day: number) {
   }
 
   const sqlData = { stmt: sql }
-  return await axios.post('/api/query/sql', sqlData).then(function (response) {
-    return response.data.data[0].count
+  return await fetchSyncPost('/api/query/sql', sqlData).then(function (response) {
+    return response.data[0].count
   })
 }
 
