@@ -151,7 +151,7 @@ const dataChart = async () => {
     }
     data = newData
   }
-  localStorage.setItem('calendar-heatmap-data', JSON.stringify({ data, now: localDay }))
+  localStorage.setItem('calendar-heatmap-data', JSON.stringify({ data }))
   return data
 }
 const formatDate = async (year: number, localDay: string, data: any[]) => {
