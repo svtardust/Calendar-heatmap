@@ -5,13 +5,12 @@ import { removeLocalData } from './modules/Heatmap'
 import { config } from './modules/CustomConfig'
 import { onLoadData } from './modules/Heatmap'
 
-
 export default class CalHeatmap extends Plugin {
   onload() {
+    onLoadData()
     addcalendarHeatmapButtonElement()
     addcalendarHeatmapViewElement()
     addEvent()
-    onLoadData()
   }
 
   onunload() {

@@ -132,18 +132,17 @@ const dataChart = async () => {
   // 获去当前年
   const date = new Date()
   const year = date.getFullYear()
-  const localDay = year + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+   const localDay = year + '-' + (date.getMonth() + 1) + '-' + date.getDate()
   const heatmapData = JSON.parse(localStorage.getItem('calendar-heatmap-data'))
-  if (heatmapData === null || new Date(localDay) > new Date(heatmapData.now)) {
+  if (heatmapData === null) {
     await formatDate(year, localDay, data)
   } else {
-    const heatmapDate = heatmapData.now
     const count = await queryCount(year, date.getMonth() + 1, date.getDate())
     const arrData = heatmapData.data
     const newData = []
     data.slice(0, data.length)
     for (let i = 0; i < arrData.length; i++) {
-      if (arrData[i].day === heatmapDate) {
+      if (arrData[i].day === localDay) {
         newData.push({ day: arrData[i].day, total: count })
       } else {
         newData.push(arrData[i])
@@ -151,7 +150,7 @@ const dataChart = async () => {
     }
     data = newData
   }
-  localStorage.setItem('calendar-heatmap-data', JSON.stringify({ data, now: localDay }))
+  localStorage.setItem('calendar-heatmap-data', JSON.stringify({ data }))
   return data
 }
 const formatDate = async (year: number, localDay: string, data: any[]) => {

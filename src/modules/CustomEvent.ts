@@ -62,8 +62,6 @@ export function addEvent() {
 
 export function removeEvent() {
   window.removeEventListener('click', windowRadiusClose)
-  document.getElementById('calendarHeatmapConfigCheckbox').removeEventListener('click', calendarHeatmapConfigCheckd)
-  document.getElementById('calendarHeatmapConfigText').removeEventListener('input', calendarHeatmapConfigtextarea)
   document.getElementById('calendarHeatmapRefresh').removeEventListener('click', calendarHeatmaprefresh)
   document.getElementById('calendarHeatmapButton').removeEventListener('click', calendarHeatmapButton)
 }
