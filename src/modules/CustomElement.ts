@@ -18,13 +18,12 @@ export function addcalendarHeatmapViewElement() {
             visibility: hidden;
             position: fixed;
             z-index: 10;
-            top: 140px; left: 195px;
             box-shadow: 0 1px 1px darkgrey;
             opacity: 1;
             background-color: white;
             border: 0;
             border-radius: 8px;
-            transform: translate(-15%, -50%);
+            transform: translate(4%, 18%);
             overflow: auto;">
             <div style="width: 1010px; height: 20px;">
                 <div id="customData"
@@ -53,6 +52,7 @@ export function addcalendarHeatmapViewElement() {
     )
   }
 }
+
 let ignore = null
 const config = localStorage.getItem('calendar-heatmap-config')
 if (config != null) {
