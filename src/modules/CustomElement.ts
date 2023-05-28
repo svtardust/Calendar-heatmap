@@ -82,7 +82,6 @@ export const addSettingElement = `<div class="config__tab-container" id="heatmap
                                   </div>`
 
 export function removeElement() {
-  document.getElementById('heatmapSettingsDialog').remove()
   document.getElementById('openViewHeatmap').remove()
   document.getElementById('calendarHeatmapButton').remove()
 }
