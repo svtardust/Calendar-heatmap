@@ -10,10 +10,12 @@ export function config() {
     height: '400px',
   })
   calendarHeatmapConfig(dialog)
-
   const localConfig = localStorage.getItem('calendar-heatmap-config')
-  if (localConfig != null && localConfig != undefined) {
-    const { isdailyNote } = JSON.parse(localConfig)
+  if (localConfig != null) {
+    const { isdailyNote, ignore } = JSON.parse(localConfig)
     document.getElementById('calendarHeatmapConfigCheckbox').checked = isdailyNote
+    if (ignore != null) {
+      document.getElementById('calendarHeatmapConfigText').value = ignore
+    }
   }
 }
