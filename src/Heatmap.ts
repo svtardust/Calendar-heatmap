@@ -1,5 +1,5 @@
 import * as d3 from 'd3'
-import { fetchSyncPost } from 'siyuan'
+import axios from 'axios'
 
 export async function heatmap() {
   const width = 1000
@@ -10,12 +10,12 @@ export async function heatmap() {
   const con = d3.select('#calendarHeatmapContent')
   con.selectAll('*').remove()
   const svg = con.append('svg').attr('width', width).attr('height', height)
-  await monthCoordinate(width, margin, weekBoxWidth, svg)
-  await weekCoordinate(height, margin, monthBoxHeight, svg)
-  await dateSquares(height, margin, weekBoxWidth, monthBoxHeight, svg)
+  monthCoordinate(width, margin, weekBoxWidth, svg)
+  weekCoordinate(height, margin, monthBoxHeight, svg)
+  dateSquares(height, margin, weekBoxWidth, monthBoxHeight, svg)
 }
 
-const monthCoordinate = async (width, margin, weekBoxWidth, svg) => {
+function monthCoordinate(width: number, margin: number, weekBoxWidth: number, svg: d3.Selection<SVGSVGElement, unknown, HTMLElement, any>) {
   const months = () => {
     const year = new Date().getFullYear()
     const months = []
@@ -47,12 +47,12 @@ const monthCoordinate = async (width, margin, weekBoxWidth, svg) => {
     .attr('font-size', '0.9em')
     .attr('font-family', 'monospace')
     .attr('fill', '#999')
-    .attr('x', (v, i) => {
+    .attr('x', (v: any, i: d3.NumberValue) => {
       return monthScale(i)
     })
 }
 
-const weekCoordinate = async (height, margin, monthBoxHeight, svg) => {
+function weekCoordinate(height: number, margin: number, monthBoxHeight: number, svg: d3.Selection<SVGSVGElement, unknown, HTMLElement, any>) {
   const weeks = ['日', '二', '四', '六']
   const weekBox = svg
     .append('g')
@@ -75,18 +75,12 @@ const weekCoordinate = async (height, margin, monthBoxHeight, svg) => {
     })
     .attr('font-size', '0.85em')
     .attr('fill', '#CCC')
-    .attr('y', (v, i) => {
+    .attr('y', (v: any, i: d3.NumberValue) => {
       return weekScale(i)
     })
 }
 
-const dateSquares = async (
-  height,
-  margin,
-  weekBoxWidth,
-  monthBoxHeight,
-  svg
-) => {
+async function dateSquares(height: number, margin: number, weekBoxWidth: number, monthBoxHeight: number, svg: d3.Selection<SVGSVGElement, unknown, HTMLElement, any>) {
   const data = await dataChart()
   const cellBox = svg
     .append('g')
@@ -147,7 +141,7 @@ const dateSquares = async (
   })
 }
 
-const dataChart = async () => {
+async function dataChart() {
   let data = []
   // 获去当前年
   const date = new Date()
@@ -157,7 +151,7 @@ const dataChart = async () => {
   if (heatmapData === null) {
     await formatDate(year, localDay, data)
   } else {
-    const count = await queryCount(year, date.getMonth() + 1, date.getDate())
+    const count = queryCount(year, date.getMonth() + 1, date.getDate())
     const arrData = heatmapData.data
     const newData = []
     data.slice(0, data.length)
@@ -173,7 +167,7 @@ const dataChart = async () => {
   localStorage.setItem('calendar-heatmap-data', JSON.stringify({ data }))
   return data
 }
-const formatDate = async (year: number, localDay: string, data: any[]) => {
+async function formatDate(year: number, localDay: string, data: any[]) {
   for (let index = 0; index < 12; index++) {
     const month = index + 1
     const monthNumber = new Date(year, month, 0).getDate()
@@ -198,38 +192,28 @@ export async function queryCount(year: number, month: number, day: number) {
   const localConfig = localStorage.getItem('calendar-heatmap-config')
   let sql = ''
   if (localConfig === null) {
-    sql =
-      `SELECT count(*) AS count FROM blocks WHERE type = 'p' AND created like '` +
-      dateStr +
-      "%'"
+    sql = `SELECT count(*) AS count FROM blocks WHERE type = 'p' AND created like '${dateStr + '%'}'`
   } else {
     const { isdailyNote, ignore } = JSON.parse(localConfig)
 
     if (isdailyNote === true) {
-      sql = `SELECT COUNT(*) AS count FROM blocks WHERE TYPE = 'p' AND hpath IN (SELECT hpath FROM blocks WHERE hpath LIKE '/daily note%') AND created like '${dateStr + '%'
-        }'`
+      sql = `SELECT COUNT(*) AS count FROM blocks WHERE TYPE = 'p' AND hpath IN (SELECT hpath FROM blocks WHERE hpath LIKE '/daily note%') AND created like '${dateStr + '%'}'`
     } else if (ignore !== null && ignore !== undefined && ignore != '') {
       sql = `SELECT COUNT(*) AS count FROM blocks WHERE TYPE = 'p' AND hpath NOT IN (SELECT hpath FROM blocks WHERE `
       const arrData = ignore.split(',')
       for (let i = 0; i < arrData.length; i++) {
         const element = arrData[i]
-        sql =
-          sql +
-          `hpath LIKE '/${element}%' ${i === arrData.length - 1 ? '' : 'OR '}`
+        sql = sql + `hpath LIKE '/${element}%' ${i === arrData.length - 1 ? '' : 'OR '}`
       }
       sql = sql + `) AND created like '${dateStr + '%'}'`
     } else {
-      sql =
-        `SELECT count(*) AS count FROM blocks WHERE type = 'p' AND created like '` +
-        dateStr +
-        "%'"
+      sql = `SELECT count(*) AS count FROM blocks WHERE type = 'p' AND created like '${dateStr + '%'}'`
     }
   }
 
   const sqlData = { stmt: sql }
-  return await fetchSyncPost('/api/query/sql', sqlData).then(function (
-    response
-  ) {
-    return response.data[0].count
+
+  return await axios.post('/api/query/sql', sqlData).then(function (response) {
+    return response.data.data[0].count
   })
 }
