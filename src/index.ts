@@ -1,25 +1,49 @@
-import { Plugin } from 'siyuan'
-import { addcalendarHeatmapButtonElement, addcalendarHeatmapViewElement, removeElement } from './modules/CustomElement'
-import { addEvent, removeEvent } from './modules/CustomEvent'
-import { removeLocalData } from './modules/Heatmap'
-import { config } from './modules/CustomConfig'
-import { onLoadData } from './modules/Heatmap'
+import { Menu, Plugin } from 'siyuan'
+import { viewElement } from './CustomElement'
+import { loadData, setting } from './CustomEvents'
 
-export default class CalHeatmap extends Plugin {
-  onload() {
-    onLoadData()
-    addcalendarHeatmapButtonElement()
-    addcalendarHeatmapViewElement()
-    addEvent()
+/**
+ * 思源笔记-日历热力图插件
+ */
+module.exports = class CalendarHeatmap extends Plugin {
+  /**
+   * 插件入口
+   */
+  onload(): void {
+    this.addTopBar({
+      icon: `<span style='background-color: green;width: 15px;height: 15px;border-radius: 5px'></span>`,
+      title: '日历热力图',
+      position: 'left',
+      callback: (evt) => {
+        addOpenView(evt)
+      },
+    })
   }
+  /**
+   * 设置窗口
+   */
+  openSetting(): void {
+    setting()
+  }
+}
 
-  onunload() {
-    removeEvent()
-    removeElement()
-    removeLocalData()
-  }
-
-  openSetting() {
-    config()
-  }
+/**
+ * 热力图显示区域
+ * @param evt 鼠标事件
+ */
+function addOpenView(evt: MouseEvent) {
+  const menu = new Menu()
+  // 加载图区
+  menu.addItem({ element: viewElement() })
+  // 修改图区背景色为白色
+  document.getElementById('openViewElement').parentElement.style.backgroundColor = '#FFFFFF'
+  // 取消小手图标
+  document.getElementById('openViewElement').parentElement.style.cursor = 'auto'
+  document.getElementById('openViewElement').parentElement.style.height = '220px'
+  // 加载数据
+  loadData()
+  menu.open({
+    x: evt.x - 40,
+    y: evt.y,
+  })
 }
