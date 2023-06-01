@@ -13,7 +13,6 @@ export async function heatmap() {
   await monthCoordinate(width, margin, weekBoxWidth, svg)
   await weekCoordinate(height, margin, monthBoxHeight, svg)
   await dateSquares(height, margin, weekBoxWidth, monthBoxHeight, svg)
-  await localTotal()
 }
 
 const monthCoordinate = async (width, margin, weekBoxWidth, svg) => {
@@ -27,7 +26,12 @@ const monthCoordinate = async (width, margin, weekBoxWidth, svg) => {
     return months
   }
   // 绘制月坐标
-  const monthBox = svg.append('g').attr('transform', 'translate(' + (margin + weekBoxWidth) + ', ' + margin + ')')
+  const monthBox = svg
+    .append('g')
+    .attr(
+      'transform',
+      'translate(' + (margin + weekBoxWidth) + ', ' + margin + ')'
+    )
   const monthScale = d3
     .scaleLinear()
     .domain([0, months().length])
@@ -50,7 +54,12 @@ const monthCoordinate = async (width, margin, weekBoxWidth, svg) => {
 
 const weekCoordinate = async (height, margin, monthBoxHeight, svg) => {
   const weeks = ['日', '二', '四', '六']
-  const weekBox = svg.append('g').attr('transform', 'translate(' + (margin - 10) + ', ' + (margin + monthBoxHeight) + ')')
+  const weekBox = svg
+    .append('g')
+    .attr(
+      'transform',
+      'translate(' + (margin - 10) + ', ' + (margin + monthBoxHeight) + ')'
+    )
   const weekScale = d3
     .scaleLinear()
     .domain([0, weeks.length])
@@ -71,9 +80,20 @@ const weekCoordinate = async (height, margin, monthBoxHeight, svg) => {
     })
 }
 
-const dateSquares = async (height, margin, weekBoxWidth, monthBoxHeight, svg) => {
+const dateSquares = async (
+  height,
+  margin,
+  weekBoxWidth,
+  monthBoxHeight,
+  svg
+) => {
   const data = await dataChart()
-  const cellBox = svg.append('g').attr('transform', 'translate(' + (margin + weekBoxWidth) + ', ' + (margin + 10) + ')')
+  const cellBox = svg
+    .append('g')
+    .attr(
+      'transform',
+      'translate(' + (margin + weekBoxWidth) + ', ' + (margin + 10) + ')'
+    )
   // 设置方块间距
   const cellMargin = 4
   // 计算方块大小
@@ -132,7 +152,7 @@ const dataChart = async () => {
   // 获去当前年
   const date = new Date()
   const year = date.getFullYear()
-   const localDay = year + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+  const localDay = year + '-' + (date.getMonth() + 1) + '-' + date.getDate()
   const heatmapData = JSON.parse(localStorage.getItem('calendar-heatmap-data'))
   if (heatmapData === null) {
     await formatDate(year, localDay, data)
@@ -171,46 +191,45 @@ const formatDate = async (year: number, localDay: string, data: any[]) => {
 }
 
 export async function queryCount(year: number, month: number, day: number) {
-  const dateStr = year.toString() + (month < 10 ? '0' + month.toString() : month.toString()) + (day < 10 ? '0' + day.toString() : day.toString())
+  const dateStr =
+    year.toString() +
+    (month < 10 ? '0' + month.toString() : month.toString()) +
+    (day < 10 ? '0' + day.toString() : day.toString())
   const localConfig = localStorage.getItem('calendar-heatmap-config')
   let sql = ''
   if (localConfig === null) {
-    sql = `SELECT count(*) AS count FROM blocks WHERE type = 'p' AND created like '` + dateStr + "%'"
+    sql =
+      `SELECT count(*) AS count FROM blocks WHERE type = 'p' AND created like '` +
+      dateStr +
+      "%'"
   } else {
     const { isdailyNote, ignore } = JSON.parse(localConfig)
 
     if (isdailyNote === true) {
-      sql = `SELECT COUNT(*) AS count FROM blocks WHERE TYPE = 'p' AND hpath IN (SELECT hpath FROM blocks WHERE hpath LIKE '/daily note%') AND created like '${dateStr + '%'}'`
+      sql = `SELECT COUNT(*) AS count FROM blocks WHERE TYPE = 'p' AND hpath IN (SELECT hpath FROM blocks WHERE hpath LIKE '/daily note%') AND created like '${dateStr + '%'
+        }'`
     } else if (ignore !== null && ignore !== undefined && ignore != '') {
       sql = `SELECT COUNT(*) AS count FROM blocks WHERE TYPE = 'p' AND hpath NOT IN (SELECT hpath FROM blocks WHERE `
       const arrData = ignore.split(',')
       for (let i = 0; i < arrData.length; i++) {
         const element = arrData[i]
-        sql = sql + `hpath LIKE '/${element}%' ${i === arrData.length - 1 ? '' : 'OR '}`
+        sql =
+          sql +
+          `hpath LIKE '/${element}%' ${i === arrData.length - 1 ? '' : 'OR '}`
       }
       sql = sql + `) AND created like '${dateStr + '%'}'`
     } else {
-      sql = `SELECT count(*) AS count FROM blocks WHERE type = 'p' AND created like '` + dateStr + "%'"
+      sql =
+        `SELECT count(*) AS count FROM blocks WHERE type = 'p' AND created like '` +
+        dateStr +
+        "%'"
     }
   }
 
   const sqlData = { stmt: sql }
-  return await fetchSyncPost('/api/query/sql', sqlData).then(function (response) {
+  return await fetchSyncPost('/api/query/sql', sqlData).then(function (
+    response
+  ) {
     return response.data[0].count
   })
-}
-
-const localTotal = async () => {
-  const date = new Date()
-  const day = date.getFullYear() + '年' + (date.getMonth() + 1) + '月' + date.getDate() + '日'
-  const count = await queryCount(date.getFullYear(), date.getMonth() + 1, date.getDate())
-  document.getElementById('customData').innerText = '今日' + day + '，共创建' + count + '个内容块'
-}
-
-export function removeLocalData() {
-  localStorage.removeItem('calendar-heatmap-data')
-}
-
-export function onLoadData() {
-  dataChart()
 }

@@ -66,10 +66,6 @@ test
 
 0.1.7版本修复了这个问题，关闭热力图后图标也会消失，如果仍存在问题请手动重启思源笔记，如果可以请提下issuse
 
-## 关于手动刷新后会卡顿问题
-
-这不是卡顿，这是在处理数据请求，卡顿是正常现象。
-
 ## 如果使用过程中出现问题怎么办？
 
 如果使用过程中出现与本插件相关的错误，请到 `https://githubfast.com/svtardust/Calendar-heatmap/issues` 页面下点击New issue 提交问题及问题信息
@@ -80,4 +76,9 @@ Calendar-heatmap 版本v0.0.3（包含）以前为挂件版本，如果想用使
 
 ## 变更日志
 
-[CHANGELOG](CHANGELOG.md)
+**本次插件更新主要解决以下问题**
+
+- 解决与某些主题冲突问题（如rem carft主题）
+
+具体可看[变更日志](CHANGELOG.md)
+
