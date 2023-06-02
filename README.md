@@ -68,10 +68,10 @@ test
 
 ## 如果使用过程中出现问题怎么办？
 
-如果使用过程中出现与本插件相关的错误，请到 `https://githubfast.com/svtardust/Calendar-heatmap/issues` 页面下点击New issue 提交问题及问题信息
+如果使用过程中出现与本插件相关的错误，请到 [https://github.com/svtardust/Calendar-heatmap/issues](https://github.com/svtardust/Calendar-heatmap/issues) 页面下点击New issue 提交问题及问题信息
 
 ## 通知
-Calendar-heatmap 版本v0.0.3（包含）以前为挂件版本，如果想用使用可以去https://githubfast.com/svtardust/Calendar-heatmap/releases/tag/v0.0.3
+Calendar-heatmap 版本v0.0.3（包含）以前为挂件版本，如果想用使用可以去https://github.com/svtardust/Calendar-heatmap/releases/tag/v0.0.3
 下载。
 
 ## 变更日志
