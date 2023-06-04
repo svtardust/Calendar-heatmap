@@ -3,6 +3,8 @@
   "author": "svtardust",
   "url": "https://github.com/svtardust/Calendar-heatmap.git",
   "version": "1.0.1",
+  "minAppVersion": "2.8.8",
+  "backends": ["windows", "linux","docker","darwin"],
   "displayName": {
     "default": "日历热力图"
   },
