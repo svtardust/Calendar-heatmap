@@ -7,9 +7,12 @@ export async function heatmap() {
   const margin = 30
   const weekBoxWidth = 20
   const monthBoxHeight = 20
-  const con = d3.select('#calendarHeatmapContent')
-  con.selectAll('*').remove()
-  const svg = con.append('svg').attr('width', width).attr('height', height)
+  
+  // 删除上一次作图
+  d3.select('#calendarHeatmapContent').selectAll('*').remove()
+  // 获取svg并定义svg高度和宽度
+  const svg = d3.select('#calendarHeatmapContent').append('svg').attr('width', width).attr('height', height)
+  // 绘制图区
   monthCoordinate(width, margin, weekBoxWidth, svg)
   weekCoordinate(height, margin, monthBoxHeight, svg)
   dateSquares(height, margin, weekBoxWidth, monthBoxHeight, svg)

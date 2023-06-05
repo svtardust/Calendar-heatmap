@@ -11,7 +11,7 @@ module.exports = class CalendarHeatmap extends Plugin {
    */
   onload(): void {
     this.addTopBar({
-      icon: `<span style='background-color: green;width: 15px;height: 15px;border-radius: 5px'></span>`,
+      icon: `<svg height=15 width=15 style='background-color: green;border-radius: 5px'></svg>`,
       title: '日历热力图',
       position: 'left',
       callback: (evt) => {

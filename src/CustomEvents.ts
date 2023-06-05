@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Dialog } from 'siyuan';
 import { heatmap, queryCount } from './Heatmap'
 import { settingElement } from './CustomElement';
