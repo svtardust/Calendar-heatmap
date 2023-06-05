@@ -5,7 +5,7 @@
   "version": "1.0.3",
   "minAppVersion": "2.8.8",
   "backends": ["windows", "linux","docker","darwin"],
-  "frontends": ["desktop","browser-desktop","desktop-window"],
+  "frontends": ["desktop","browser-desktop","desktop-window","browser-mobile"],
   "displayName": {
     "default": "日历热力图"
   },
