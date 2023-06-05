@@ -15,7 +15,7 @@ export async function heatmap() {
   // 绘制图区
   monthCoordinate(width, margin, weekBoxWidth, svg)
   weekCoordinate(height, margin, monthBoxHeight, svg)
-  dateSquares(height, margin, weekBoxWidth, monthBoxHeight, svg)
+  await dateSquares(height, margin, weekBoxWidth, monthBoxHeight, svg)
 }
 
 function monthCoordinate(width: number, margin: number, weekBoxWidth: number, svg: d3.Selection<SVGSVGElement, unknown, HTMLElement, any>) {
@@ -193,7 +193,7 @@ export async function queryCount(year: number, month: number, day: number) {
     (month < 10 ? '0' + month.toString() : month.toString()) +
     (day < 10 ? '0' + day.toString() : day.toString())
   const localConfig = localStorage.getItem('calendar-heatmap-config')
-  let sql = ''
+  let sql: string
   if (localConfig === null) {
     sql = `SELECT count(*) AS count FROM blocks WHERE type = 'p' AND created like '${dateStr + '%'}'`
   } else {

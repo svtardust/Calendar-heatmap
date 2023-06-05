@@ -1,6 +1,6 @@
 {
   "name": "calendar-heatmap",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "type": "module",
   "description": "",
   "repository": "",
@@ -16,6 +16,7 @@
     "@sveltejs/vite-plugin-svelte": "^2.0.3",
     "@tsconfig/svelte": "^4.0.1",
     "@types/d3": "^7.4.0",
+    "@types/minimist": "^1.2.2",
     "@types/node": "^20.2.0",
     "fast-glob": "^3.2.12",
     "glob": "^7.2.3",

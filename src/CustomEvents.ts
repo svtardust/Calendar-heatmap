@@ -1,7 +1,7 @@
 // @ts-nocheck
-import { Dialog } from 'siyuan';
+import { Dialog } from 'siyuan'
 import { heatmap, queryCount } from './Heatmap'
-import { settingElement } from './CustomElement';
+import { settingElement } from './CustomElement'
 
 /**
  * 加载数据，填充图区
@@ -10,7 +10,7 @@ export async function loadData() {
   // 填充热力图
   await heatmap()
   // 填充今日统计区域
-  statisticalRegionData()
+  await statisticalRegionData()
   // 刷新事件监听
   document.getElementById('calendarHeatmapRefresh').addEventListener('click', calendarHeatmapRefresh)
 }
@@ -28,17 +28,13 @@ export function setting() {
   const localConfig = localStorage.getItem('calendar-heatmap-config')
   if (localConfig != null) {
     const { isdailyNote, ignore } = JSON.parse(localConfig)
-    document.getElementById('calendarHeatmapConfigCheckbox').checked = isdailyNote
+    document.getElementById('calendarHeatmapConfigCheckbox')['checked'] = isdailyNote
     if (ignore != null) {
-      document.getElementById('calendarHeatmapConfigText').value = ignore
+      document.getElementById('calendarHeatmapConfigText')['value'] = ignore
     }
   }
   dialog.element.querySelector('#calendarHeatmapConfigCheckbox').addEventListener('click', calendarHeatmapConfigCheckd)
   dialog.element.querySelector('#calendarHeatmapConfigText').addEventListener('input', calendarHeatmapConfigtextarea)
-}
-
-export function remove() {
-  localStorage.removeItem('calendar-heatmap-data')
 }
 
 async function statisticalRegionData() {
@@ -59,11 +55,11 @@ function calendarHeatmapConfigCheckd(event: any) {
   const checked = event.target.checked
   if (checked) {
     localStorage.setItem('calendar-heatmap-config', JSON.stringify({ isdailyNote: true }))
-    document.getElementById('calendarHeatmapConfigCheckbox').checked = true
-    document.getElementById('calendarHeatmapConfigText').value = ''
+    document.getElementById('calendarHeatmapConfigCheckbox')['checked'] = true
+    document.getElementById('calendarHeatmapConfigText')['value'] = ''
   } else {
     localStorage.setItem('calendar-heatmap-config', JSON.stringify({ isdailyNote: false }))
-    document.getElementById('calendarHeatmapConfigCheckbox').checked = false
+    document.getElementById('calendarHeatmapConfigCheckbox')['checked'] = false
   }
 
 }
@@ -71,7 +67,7 @@ function calendarHeatmapConfigCheckd(event: any) {
 function calendarHeatmapConfigtextarea(event: any) {
   const text = event.target.value
   if (text != null) {
-    document.getElementById('calendarHeatmapConfigCheckbox').checked = false
+    document.getElementById('calendarHeatmapConfigCheckbox')['checked'] = false
     localStorage.setItem('calendar-heatmap-config', JSON.stringify({ checked: false, ignore: text }))
   }
 }
