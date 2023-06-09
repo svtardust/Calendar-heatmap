@@ -149,30 +149,28 @@ async function dataChart() {
   const localConfig = localStorage.getItem('calendar-heatmap-config')
   let response
   if (localConfig === null) {
-    const sql = `SELECT SUBSTR(created, 1, 8) AS date, COUNT(*) count FROM blocks WHERE type = 'p' GROUP BY SUBSTR(created, 1, 8)`
+    const sql = `SELECT SUBSTR(created, 1, 8) AS date, COUNT(*) count FROM blocks WHERE type = 'p' AND created >= STRFTIME('%Y','now','localtime') GROUP BY SUBSTR(created, 1, 8) LIMIT 366`
     response = await (await axios.post('/api/query/sql', { stmt: sql })).data.data
   } else {
     const { isdailyNote, ignore } = JSON.parse(localConfig)
     if (isdailyNote === true) {
-      const sql = `SELECT SUBSTR(created, 1, 8) AS date, COUNT(*) count FROM blocks WHERE type = 'p' AND hpath LIKE '/daily note%' GROUP BY SUBSTR(created, 1, 8)`
+      const sql = `SELECT SUBSTR(created, 1, 8) AS date, COUNT(*) count FROM blocks WHERE type = 'p' AND created >= STRFTIME('%Y','now','localtime') AND hpath LIKE '/daily note%' GROUP BY SUBSTR(created, 1, 8) LIMIT 366`
       response = await (await axios.post('/api/query/sql', { stmt: sql })).data.data
     } else if (ignore !== null && ignore !== undefined && ignore != '') {
-      let sql = `SELECT SUBSTR(created, 1, 8) AS date, COUNT(*) count FROM blocks WHERE type = 'p' AND `
+      let sql = `SELECT SUBSTR(created, 1, 8) AS date, COUNT(*) count FROM blocks WHERE type = 'p' AND created >= STRFTIME('%Y','now','localtime') AND `
       const arrData = ignore.split(',')
       for (let i = 0; i < arrData.length; i++) {
         sql = sql + `hpath NOT LIKE '/${arrData[i]}%' ${i === arrData.length - 1 ? '' : 'OR '}`
       }
-      sql = sql + ` GROUP BY SUBSTR(created, 1, 8)`
+      sql = sql + ` GROUP BY SUBSTR(created, 1, 8) LIMIT 366`
       response = await (await axios.post('/api/query/sql', { stmt: sql })).data.data
     } else {
-      const sql = `SELECT SUBSTR(created, 1, 8) AS date, COUNT(*) count FROM blocks WHERE type = 'p' GROUP BY SUBSTR(created, 1, 8)`
+      const sql = `SELECT SUBSTR(created, 1, 8) AS date, COUNT(*) count FROM blocks WHERE type = 'p' AND created >= STRFTIME('%Y','now','localtime') GROUP BY SUBSTR(created, 1, 8) LIMIT 366`
       response = await (await axios.post('/api/query/sql', { stmt: sql })).data.data
     }
   }
   // 格式化数据，并且包装数据
   data = formatData(response)
-
-
   return data
 }
 
