@@ -1,7 +1,8 @@
 // @ts-nocheck
 import { Dialog } from 'siyuan'
-import { heatmap, queryCount } from './Heatmap'
+import { heatmap } from './Heatmap'
 import { settingElement } from './CustomElement'
+import axios from 'axios'
 
 /**
  * 加载数据，填充图区
@@ -40,15 +41,20 @@ export function setting() {
 async function statisticalRegionData() {
   const date = new Date()
   const day = date.getFullYear() + '年' + (date.getMonth() + 1) + '月' + date.getDate() + '日'
-  const count = await queryCount(date.getFullYear(), date.getMonth() + 1, date.getDate()
-  )
+  
+  const dateStr =
+    date.getFullYear().toString() +
+    ((date.getMonth() + 1) < 10 ? '0' + (date.getMonth() + 1).toString() : (date.getMonth() + 1).toString()) +
+    (date.getDate() < 10 ? '0' + date.getDate().toString() : date.getDate().toString())
+  const sql = `SELECT count(*) AS count FROM blocks WHERE type = 'p' AND created like '${dateStr + '%'}'`
+  const count = await (await axios.post('/api/query/sql', { stmt: sql })).data.data[0].count
   document.getElementById('StatisticalRegion').innerText = `今日${day},共创建${count}个内容块`
 }
 
 
 async function calendarHeatmapRefresh(this: HTMLElement) {
   localStorage.removeItem('calendar-heatmap-data')
-  await heatmap();
+  await heatmap()
 }
 
 function calendarHeatmapConfigCheckd(event: any) {
