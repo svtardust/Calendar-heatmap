@@ -53,7 +53,6 @@ async function statisticalRegionData() {
 
 
 async function calendarHeatmapRefresh(this: HTMLElement) {
-  localStorage.removeItem('calendar-heatmap-data')
   await heatmap()
 }
 
