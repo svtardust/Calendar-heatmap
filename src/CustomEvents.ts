@@ -12,8 +12,6 @@ export async function loadData() {
   await heatmap()
   // 填充今日统计区域
   await statisticalRegionData()
-  // 刷新事件监听
-  document.getElementById('calendarHeatmapRefresh').addEventListener('click', calendarHeatmapRefresh)
 }
 
 /**
@@ -41,21 +39,12 @@ export function setting() {
 async function statisticalRegionData() {
   const date = new Date()
   const day = date.getFullYear() + '年' + (date.getMonth() + 1) + '月' + date.getDate() + '日'
-  
-  const dateStr =
-    date.getFullYear().toString() +
-    ((date.getMonth() + 1) < 10 ? '0' + (date.getMonth() + 1).toString() : (date.getMonth() + 1).toString()) +
-    (date.getDate() < 10 ? '0' + date.getDate().toString() : date.getDate().toString())
-  const sql = `SELECT count(*) AS count FROM blocks WHERE type = 'p' AND created like '${dateStr + '%'}'`
+
+  const sql = `SELECT count(*) AS count FROM blocks WHERE type = 'p' AND created like strftime('%Y%m%d','now','localtime')`
   const count = await (await axios.post('/api/query/sql', { stmt: sql })).data.data[0].count
   document.getElementById('StatisticalRegion').innerText = `今日${day},共创建${count}个内容块`
 }
 
-
-async function calendarHeatmapRefresh(this: HTMLElement) {
-  localStorage.removeItem('calendar-heatmap-data')
-  await heatmap()
-}
 
 function calendarHeatmapConfigCheckd(event: any) {
   const checked = event.target.checked

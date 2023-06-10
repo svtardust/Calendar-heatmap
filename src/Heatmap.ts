@@ -13,22 +13,13 @@ export async function heatmap() {
   // 获取svg并定义svg高度和宽度
   const svg = d3.select('#calendarHeatmapContent').append('svg').attr('width', width).attr('height', height)
   // 绘制图区
-  monthCoordinate(width, margin, weekBoxWidth, svg)
+  const { months, days } = await dataChart()
+  monthCoordinate(width, margin, weekBoxWidth, svg, months)
   weekCoordinate(height, margin, monthBoxHeight, svg)
-  await dateSquares(height, margin, weekBoxWidth, monthBoxHeight, svg)
+  await dateSquares(height, margin, weekBoxWidth, monthBoxHeight, svg, days)
 }
 
-function monthCoordinate(width: number, margin: number, weekBoxWidth: number, svg: d3.Selection<SVGSVGElement, unknown, HTMLElement, any>) {
-  const months = () => {
-    const year = new Date().getFullYear()
-    const months = []
-    for (let i = 1; i <= 12; i++) {
-      const month = year + '-' + i
-      months.push(month)
-    }
-    return months
-  }
-  // 绘制月坐标
+function monthCoordinate(width: number, margin: number, weekBoxWidth: number, svg: d3.Selection<SVGSVGElement, unknown, HTMLElement, any>, months) {// 绘制月坐标
   const monthBox = svg
     .append('g')
     .attr(
@@ -37,15 +28,15 @@ function monthCoordinate(width: number, margin: number, weekBoxWidth: number, sv
     )
   const monthScale = d3
     .scaleLinear()
-    .domain([0, months().length])
+    .domain([0, months.length])
     .range([20, width - margin - weekBoxWidth - 20])
   monthBox
     .selectAll('text')
-    .data(months())
+    .data(months)
     .enter()
     .append('text')
-    .text((v) => {
-      return v
+    .text(function(d) {
+      return d
     })
     .attr('font-size', '0.9em')
     .attr('font-family', 'monospace')
@@ -83,8 +74,8 @@ function weekCoordinate(height: number, margin: number, monthBoxHeight: number, 
     })
 }
 
-async function dateSquares(height: number, margin: number, weekBoxWidth: number, monthBoxHeight: number, svg: d3.Selection<SVGSVGElement, unknown, HTMLElement, any>) {
-  const data = await dataChart()
+async function dateSquares(height: number, margin: number, weekBoxWidth: number, monthBoxHeight: number, svg: d3.Selection<SVGSVGElement, unknown, HTMLElement, any>, days) {
+
   const cellBox = svg
     .append('g')
     .attr(
@@ -99,7 +90,7 @@ async function dateSquares(height: number, margin: number, weekBoxWidth: number,
   let cellCol = 0
   const cell = cellBox
     .selectAll('rect')
-    .data(data)
+    .data(days)
     .enter()
     .append('rect')
     .attr('width', cellSize)
@@ -140,46 +131,43 @@ async function dateSquares(height: number, margin: number, weekBoxWidth: number,
     if (d.total != 0 || d.total != undefined) {
       message = '有 ' + d.total + '个内容块'
     }
-    return d.day + '\n' + message
+    return d.date + '\n' + message
   })
 }
 
-async function dataChart() {
-  let data: any[]
+async function queryDate() {
   const localConfig = localStorage.getItem('calendar-heatmap-config')
   let response
   if (localConfig === null) {
-    const sql = `SELECT SUBSTR(created, 1, 8) AS date, COUNT(*) count FROM blocks WHERE type = 'p' AND created >= STRFTIME('%Y','now','localtime') GROUP BY SUBSTR(created, 1, 8) LIMIT 366`
+    const sql = `SELECT SUBSTR(created, 1, 8) AS date, COUNT(*) count FROM blocks WHERE type = 'p' GROUP BY SUBSTR(created, 1, 8) ORDER BY date DESC LIMIT 370`
     response = await (await axios.post('/api/query/sql', { stmt: sql })).data.data
   } else {
     const { isdailyNote, ignore } = JSON.parse(localConfig)
     if (isdailyNote === true) {
-      const sql = `SELECT SUBSTR(created, 1, 8) AS date, COUNT(*) count FROM blocks WHERE type = 'p' AND created >= STRFTIME('%Y','now','localtime') AND hpath LIKE '/daily note%' GROUP BY SUBSTR(created, 1, 8) LIMIT 366`
+      const sql = `SELECT SUBSTR(created, 1, 8) AS date, COUNT(*) count FROM blocks WHERE type = 'p' AND hpath LIKE '/daily note%' GROUP BY SUBSTR(created, 1, 8) ORDER BY date DESC LIMIT 370`
       response = await (await axios.post('/api/query/sql', { stmt: sql })).data.data
     } else if (ignore !== null && ignore !== undefined && ignore != '') {
-      let sql = `SELECT SUBSTR(created, 1, 8) AS date, COUNT(*) count FROM blocks WHERE type = 'p' AND created >= STRFTIME('%Y','now','localtime') AND `
+      let sql = `SELECT SUBSTR(created, 1, 8) AS date, COUNT(*) count FROM blocks WHERE type = 'p' AND `
       const arrData = ignore.split(',')
       for (let i = 0; i < arrData.length; i++) {
         sql = sql + `hpath NOT LIKE '/${arrData[i]}%' ${i === arrData.length - 1 ? '' : 'OR '}`
       }
-      sql = sql + ` GROUP BY SUBSTR(created, 1, 8) LIMIT 366`
+      sql = sql + ` GROUP BY SUBSTR(created, 1, 8) ORDER BY date DESC LIMIT 365`
       response = await (await axios.post('/api/query/sql', { stmt: sql })).data.data
     } else {
-      const sql = `SELECT SUBSTR(created, 1, 8) AS date, COUNT(*) count FROM blocks WHERE type = 'p' AND created >= STRFTIME('%Y','now','localtime') GROUP BY SUBSTR(created, 1, 8) LIMIT 366`
+      const sql = `SELECT SUBSTR(created, 1, 8) AS date, COUNT(*) count FROM blocks WHERE type = 'p' GROUP BY SUBSTR(created, 1, 8) ORDER BY date DESC LIMIT 370`
       response = await (await axios.post('/api/query/sql', { stmt: sql })).data.data
     }
   }
-  // 格式化数据，并且包装数据
-  data = formatData(response)
-  return data
+  return response
 }
 
-function formatData(params) {
-  let data = []
+async function dataChart() {
+  const resDate = await queryDate()
   let formatParams = []
   // 遍历数据
-  if (params != null) {
-    params.forEach(param => {
+  if (resDate != null) {
+    resDate.forEach(param => {
       const { date, count } = param
       // 格式化date，封装进新数组
       const formatDate = `${date.substring(0, 4)}-${(date.substring(4, 6) > 10 ? date.substring(4, 6) : date.substring(4, 6).substring(1, 2))}-${(date.substring(6, 8) > 10 ? date.substring(6, 8) : date.substring(6, 8).substring(1.2))}`
@@ -187,29 +175,58 @@ function formatData(params) {
     })
   }
 
-  const date = new Date()
-  const year = date.getFullYear()
-  for (let index = 0; index < 12; index++) {
-    const month = index + 1
-    const monthNumber = new Date(year, month, 0).getDate()
-    for (let index = 1; index < monthNumber + 1; index++) {
-      const day = year + '-' + month + '-' + index
-      let mark = false
-      let markIndex
-      for (let i = 0; i < formatParams.length; i++) {
-        if (formatParams[i].day === day) {
-          mark = true
-          markIndex = i
-          break
+  const months = []
+  const days = []
+
+  for (let i = 12; i > 0; i--) {
+    const referDate = new Date()
+
+    referDate.setMonth(referDate.getMonth() - i + 2)
+    referDate.setDate(0)
+
+    let month: string | number = referDate.getMonth() + 1
+
+    for (let j = 1; j <= referDate.getDate(); j++) {
+      let data = { date: referDate.getFullYear() + '-' + month + '-' + j, total: 0 }
+      formatParams.forEach(item => {
+        if (item.day === data.date) {
+          data.total = item.total
         }
-      }
-      if (mark) {
-        data.push(formatParams[markIndex])
-      } else {
-        data.push({ day, total: 0 })
-      }
+      })
+
+      days.push(data)
     }
+    months.push(referDate.getFullYear() + '-' + month)
   }
-  return data
+  let firstDate = days[0].date
+
+  let d = new Date(firstDate)
+  let day = d.getDay()
+  if (day == 0) {
+    day = 7
+  }
+
+  for (let i = 1; i < day; i++) {
+    const date = new Date(firstDate)
+    date.setDate(date.getDate() - i)
+
+    let formatDate = [date.getFullYear(), date.getMonth() + 1, date.getDate()]
+
+    if (formatDate[1] < 10) {
+      formatDate[1] = Number('0' + formatDate[1])
+    }
+
+    if (formatDate[2] < 10) {
+      formatDate[2] = Number('0' + formatDate[2])
+    }
+    let total = 0
+    formatParams.forEach(item => {
+      if (item.day === formatDate.join('-')) {
+        total = item.total
+      }
+    })
+    days.unshift({ date: formatDate.join('-'), total })
+  }
+  return { days, months }
 }
 

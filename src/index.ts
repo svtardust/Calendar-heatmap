@@ -44,7 +44,7 @@ async function addOpenView(evt: MouseEvent) {
   // 加载数据
   await loadData()
   menu.open({
-    x: evt.x - 40,
-    y: evt.y,
+    x: evt.x - 830,
+    y: evt.y + 23,
   })
 }
