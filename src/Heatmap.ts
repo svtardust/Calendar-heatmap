@@ -47,7 +47,7 @@ function monthCoordinate(width: number, margin: number, weekBoxWidth: number, sv
 }
 
 function weekCoordinate(height: number, margin: number, monthBoxHeight: number, svg: d3.Selection<SVGSVGElement, unknown, HTMLElement, any>) {
-  const weeks = ['日', '二', '四', '六']
+  const weeks = ['一', '三', '五', '日']
   const weekBox = svg
     .append('g')
     .attr(
