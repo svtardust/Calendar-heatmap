@@ -40,7 +40,6 @@ async function addOpenView(evt: MouseEvent) {
   document.getElementById('openViewElement').parentElement.style.backgroundColor = '#FFFFFF'
   // 取消小手图标
   document.getElementById('openViewElement').parentElement.style.cursor = 'auto'
-  document.getElementById('openViewElement').parentElement.style.height = '220px'
   // 加载数据
   await loadData()
   menu.open({

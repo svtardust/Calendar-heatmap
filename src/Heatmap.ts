@@ -2,16 +2,16 @@ import * as d3 from 'd3'
 import axios from 'axios'
 
 export async function heatmap() {
-  const width = 1000
+  const width = 966
   const height = 180
-  const margin = 30
+  const margin = { top: 15, right: 30, bottom: 30, left: 25 }
   const weekBoxWidth = 20
   const monthBoxHeight = 20
 
   // 删除上一次作图
   d3.select('#calendarHeatmapContent').selectAll('*').remove()
   // 获取svg并定义svg高度和宽度
-  const svg = d3.select('#calendarHeatmapContent').append('svg').attr('width', width).attr('height', height)
+  const svg = d3.select('#calendarHeatmapContent').append('svg').attr('width', width).attr('height', height - 30)
   // 绘制图区
   const { months, days } = await dataChart()
   monthCoordinate(width, margin, weekBoxWidth, svg, months)
@@ -19,17 +19,18 @@ export async function heatmap() {
   await dateSquares(height, margin, weekBoxWidth, monthBoxHeight, svg, days)
 }
 
-function monthCoordinate(width: number, margin: number, weekBoxWidth: number, svg: d3.Selection<SVGSVGElement, unknown, HTMLElement, any>, months) {// 绘制月坐标
+function monthCoordinate(width, margin, weekBoxWidth, svg, months) {// 绘制月坐标
   const monthBox = svg
     .append('g')
     .attr(
       'transform',
-      'translate(' + (margin + weekBoxWidth) + ', ' + margin + ')',
+      'translate(' + (margin.left - 10) + ', ' + margin.top + ')',
     )
   const monthScale = d3
     .scaleLinear()
     .domain([0, months.length])
-    .range([20, width - margin - weekBoxWidth - 20])
+    .range([20, width - weekBoxWidth])
+  // .range([20, width - margin - weekBoxWidth - 20])
   monthBox
     .selectAll('text')
     .data(months)
@@ -41,31 +42,31 @@ function monthCoordinate(width: number, margin: number, weekBoxWidth: number, sv
     .attr('font-size', '0.9em')
     .attr('font-family', 'monospace')
     .attr('fill', '#999')
-    .attr('x', (v: any, i: d3.NumberValue) => {
+    .attr('x', (function(d, i) {
       return monthScale(i)
-    })
+    }))
 }
 
-function weekCoordinate(height: number, margin: number, monthBoxHeight: number, svg: d3.Selection<SVGSVGElement, unknown, HTMLElement, any>) {
+function weekCoordinate(height, margin, monthBoxHeight, svg) {
   const weeks = ['一', '三', '五', '日']
   const weekBox = svg
     .append('g')
     .attr(
       'transform',
-      'translate(' + (margin - 10) + ', ' + (margin + monthBoxHeight) + ')',
+      'translate(' + (margin.left - 20) + ', ' + (margin.top + monthBoxHeight) + ')',
     )
   const weekScale = d3
     .scaleLinear()
     .domain([0, weeks.length])
-    .range([0, height - margin - monthBoxHeight + 14])
+    .range([0, height - margin.right - monthBoxHeight + 14])
 
   weekBox
     .selectAll('text')
     .data(weeks)
     .enter()
     .append('text')
-    .text((v) => {
-      return v
+    .text((d) => {
+      return d
     })
     .attr('font-size', '0.85em')
     .attr('fill', '#CCC')
@@ -74,18 +75,18 @@ function weekCoordinate(height: number, margin: number, monthBoxHeight: number, 
     })
 }
 
-async function dateSquares(height: number, margin: number, weekBoxWidth: number, monthBoxHeight: number, svg: d3.Selection<SVGSVGElement, unknown, HTMLElement, any>, days) {
+async function dateSquares(height, margin, weekBoxWidth, monthBoxHeight, svg, days) {
 
   const cellBox = svg
     .append('g')
     .attr(
       'transform',
-      'translate(' + (margin + weekBoxWidth) + ', ' + (margin + 10) + ')',
+      'translate(' + ((margin.left - 15) + weekBoxWidth) + ', ' + (margin.top + 10) + ')',
     )
   // 设置方块间距
   const cellMargin = 4
   // 计算方块大小
-  const cellSize = (height - margin - monthBoxHeight - cellMargin * 6 - 10) / 7
+  const cellSize = (height - margin.right - monthBoxHeight - cellMargin * 6 - 10) / 7
   // 方块列计数器
   let cellCol = 0
   const cell = cellBox
@@ -113,14 +114,14 @@ async function dateSquares(height: number, margin: number, weekBoxWidth: number,
       }
       return '#ebedf0'
     })
-    .attr('x', (v, i) => {
+    .attr('x', (d, i) => {
       if (i % 7 === 0) {
         cellCol++
       }
       const x = (cellCol - 1) * cellSize
       return cellCol > 1 ? x + cellMargin * (cellCol - 1) : x
     })
-    .attr('y', (v, i) => {
+    .attr('y', (d, i) => {
       const y = i % 7
       return y > 0 ? y * cellSize + cellMargin * y : y * cellSize
     })
@@ -144,7 +145,7 @@ async function queryDate() {
   } else {
     const { isdailyNote, ignore } = JSON.parse(localConfig)
     if (isdailyNote === true) {
-      const sql = `SELECT SUBSTR(created, 1, 8) AS date, COUNT(*) count FROM blocks WHERE type = 'p' AND hpath LIKE '/daily note%' GROUP BY SUBSTR(created, 1, 8) ORDER BY date DESC LIMIT 370`
+      const sql = `SELECT SUBSTR(created, 1, 8) AS date, COUNT(*) count FROM blocks WHERE type = 'p' AND  hpath LIKE '/daily note%' GROUP BY SUBSTR(created, 1, 8) ORDER BY date DESC LIMIT 370`
       response = await (await axios.post('/api/query/sql', { stmt: sql })).data.data
     } else if (ignore !== null && ignore !== undefined && ignore != '') {
       let sql = `SELECT SUBSTR(created, 1, 8) AS date, COUNT(*) count FROM blocks WHERE type = 'p' AND `

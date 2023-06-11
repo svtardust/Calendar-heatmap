@@ -40,9 +40,11 @@ async function statisticalRegionData() {
   const date = new Date()
   const day = date.getFullYear() + '年' + (date.getMonth() + 1) + '月' + date.getDate() + '日'
 
-  const sql = `SELECT count(*) AS count FROM blocks WHERE type = 'p' AND created like strftime('%Y%m%d','now','localtime')`
-  const count = await (await axios.post('/api/query/sql', { stmt: sql })).data.data[0].count
-  document.getElementById('StatisticalRegion').innerText = `今日${day},共创建${count}个内容块`
+  const createSql = `SELECT count(*) AS count FROM blocks WHERE type = 'p' AND created > strftime('%Y%m%d','now','localtime')`
+  const updateSql = `SELECT count(*) AS count FROM blocks WHERE type = 'p' AND updated > strftime('%Y%m%d','now','localtime') AND length <> 0`
+  const createCount = await (await axios.post('/api/query/sql', { stmt: createSql })).data.data[0].count
+  const updateCount = (await axios.post('/api/query/sql', { stmt: updateSql })).data.data[0].count
+  document.getElementById('StatisticalRegion').innerText = `今日${day},共创建${createCount}个内容块，共修改${updateCount}个内容块`
 }
 
 

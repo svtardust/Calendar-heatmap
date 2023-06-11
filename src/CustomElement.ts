@@ -9,11 +9,10 @@ export function viewElement() {
   divElement.setAttribute('style','background-color: white;')
   // 文字显示及图标刷新区域
   const topElement = document.createElement('div')
-  topElement.setAttribute('style', 'height:30px;')
   // 今日块统计区域
   const topLeftElement = document.createElement('div')
   topLeftElement.setAttribute('id', 'StatisticalRegion')
-  topLeftElement.setAttribute('style', 'width: 600px; padding-left: 50px; float: left; font-size: inherit; letter-spacing: 1px; font-weight: lighter; color: #93989f;')
+  topLeftElement.setAttribute('style', 'padding-left: 32px;letter-spacing: 1px;font-size: 0.9em;font-family: monospace; color: rgb(153, 153, 153);')
   topElement.appendChild(topLeftElement)
   divElement.appendChild(topElement)
 
