@@ -1,8 +1,9 @@
 import * as d3 from 'd3'
 import axios from 'axios'
+import { colors } from './theme'
 
 export async function heatmap() {
-  const width = 966
+  const width = 815
   const height = 180
   const margin = { top: 15, right: 30, bottom: 30, left: 25 }
   const weekBoxWidth = 20
@@ -11,7 +12,7 @@ export async function heatmap() {
   // 删除上一次作图
   d3.select('#calendarHeatmapContent').selectAll('*').remove()
   // 获取svg并定义svg高度和宽度
-  const svg = d3.select('#calendarHeatmapContent').append('svg').attr('width', width).attr('height', height - 30)
+  const svg = d3.select('#calendarHeatmapContent').append('svg').attr('width', width).attr('height', height - 55)
   // 绘制图区
   const { months, days } = await dataChart()
   monthCoordinate(width, margin, weekBoxWidth, svg, months)
@@ -29,20 +30,19 @@ function monthCoordinate(width, margin, weekBoxWidth, svg, months) {// 绘制月
   const monthScale = d3
     .scaleLinear()
     .domain([0, months.length])
-    .range([20, width - weekBoxWidth])
-  // .range([20, width - margin - weekBoxWidth - 20])
+    .range([20, width - weekBoxWidth + 10])
   monthBox
     .selectAll('text')
     .data(months)
     .enter()
     .append('text')
-    .text(function(d) {
+    .text(function (d) {
       return d
     })
-    .attr('font-size', '0.9em')
+    .attr('font-size', '12px')
     .attr('font-family', 'monospace')
-    .attr('fill', '#999')
-    .attr('x', (function(d, i) {
+    .attr('fill', '#5D6063')
+    .attr('x', (function (d, i) {
       return monthScale(i)
     }))
 }
@@ -53,12 +53,12 @@ function weekCoordinate(height, margin, monthBoxHeight, svg) {
     .append('g')
     .attr(
       'transform',
-      'translate(' + (margin.left - 20) + ', ' + (margin.top + monthBoxHeight) + ')',
+      `translate(${margin.left - 20}, ${margin.top + monthBoxHeight})`,
     )
   const weekScale = d3
     .scaleLinear()
     .domain([0, weeks.length])
-    .range([0, height - margin.right - monthBoxHeight + 14])
+    .range([0, height - margin.right - monthBoxHeight - 13])
 
   weekBox
     .selectAll('text')
@@ -68,14 +68,16 @@ function weekCoordinate(height, margin, monthBoxHeight, svg) {
     .text((d) => {
       return d
     })
-    .attr('font-size', '0.85em')
-    .attr('fill', '#CCC')
-    .attr('y', (v: any, i: d3.NumberValue) => {
+    .attr('font-size', '12px')
+    .attr('fill', '#5D6063')
+    .attr('y', (d, i) => {
       return weekScale(i)
     })
 }
 
 async function dateSquares(height, margin, weekBoxWidth, monthBoxHeight, svg, days) {
+  const color = colors()
+  console.log(color);
 
   const cellBox = svg
     .append('g')
@@ -86,7 +88,7 @@ async function dateSquares(height, margin, weekBoxWidth, monthBoxHeight, svg, da
   // 设置方块间距
   const cellMargin = 4
   // 计算方块大小
-  const cellSize = (height - margin.right - monthBoxHeight - cellMargin * 6 - 10) / 7
+  const cellSize = (height - margin.right - monthBoxHeight - cellMargin * 6 - 30) / 7
   // 方块列计数器
   let cellCol = 0
   const cell = cellBox
@@ -97,22 +99,22 @@ async function dateSquares(height, margin, weekBoxWidth, monthBoxHeight, svg, da
     .attr('width', cellSize)
     .attr('height', cellSize)
     .attr('rx', 3)
-    .attr('fill', function(d) {
+    .attr('fill', function (d) {
       if (d.total === undefined || d.total === 0) {
-        return '#ebedf0'
+        return color[0]
       }
       let total = d.total
       if (total > 0) {
         if (total <= 30) {
-          return '#9be9a8'
+          return color[1]
         } else if (total <= 70) {
-          return '#40c463'
+          return color[2]
         } else if (total <= 120) {
-          return '#30a14e'
+          return color[3]
         }
-        return '#216e39'
+        return color[4]
       }
-      return '#ebedf0'
+      return color[0]
     })
     .attr('x', (d, i) => {
       if (i % 7 === 0) {
