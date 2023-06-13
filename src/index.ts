@@ -36,14 +36,15 @@ async function addOpenView(evt: MouseEvent) {
   const menu = new Menu()
   // 加载图区
   menu.addItem({ element: viewElement() })
-  // 修改图区背景色为白色
-  document.getElementById('openViewElement').parentElement.style.backgroundColor = '#FFFFFF'
+  // 修改图区背景色 0亮色，1 暗色
+  // @ts-ignore
+  document.getElementById('openViewElement').parentElement.style.backgroundColor = `${window.siyuan.config.appearance.mode === 0 ? '#FFFFFF' : '#0D1117'}`
   // 取消小手图标
   document.getElementById('openViewElement').parentElement.style.cursor = 'auto'
   // 加载数据
   await loadData()
   menu.open({
-    x: evt.x - 830,
-    y: evt.y + 23,
+    x: evt.x,
+    y: evt.y,
   })
 }

@@ -6,13 +6,13 @@ export function viewElement() {
   // 包裹图层
   const divElement = document.createElement('div')
   divElement.setAttribute('id', 'openViewElement')
-  divElement.setAttribute('style','background-color: white;')
+  // divElement.setAttribute('style','background-color: white;')
   // 文字显示及图标刷新区域
   const topElement = document.createElement('div')
   // 今日块统计区域
   const topLeftElement = document.createElement('div')
   topLeftElement.setAttribute('id', 'StatisticalRegion')
-  topLeftElement.setAttribute('style', 'padding-left: 32px;letter-spacing: 1px;font-size: 0.9em;font-family: monospace; color: rgb(153, 153, 153);')
+  topLeftElement.setAttribute('style', 'padding-left: 32px;letter-spacing: 1px;font-size: 12px;font-family: monospace; color: #5D6063')
   topElement.appendChild(topLeftElement)
   divElement.appendChild(topElement)
 
