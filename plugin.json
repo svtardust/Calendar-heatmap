@@ -2,8 +2,8 @@
   "name": "Calendar-heatmap",
   "author": "svtardust",
   "url": "https://github.com/svtardust/Calendar-heatmap",
-  "version": "1.0.8",
-  "minAppVersion": "2.8.9",
+  "version": "1.0.9",
+  "minAppVersion": "2.8.10",
   "backends": ["windows", "linux","docker","darwin"],
   "frontends": ["desktop","browser-desktop","desktop-window","browser-mobile"],
   "displayName": {
