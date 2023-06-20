@@ -1,11 +1,11 @@
 import * as d3 from 'd3'
 import axios from 'axios'
-import { colors } from './theme'
+import {colors} from './theme'
 
 export async function heatmap() {
   const width = 815
   const height = 180
-  const margin = { top: 15, right: 30, bottom: 30, left: 25 }
+  const margin = {top: 15, right: 30, bottom: 30, left: 25}
   const weekBoxWidth = 20
   const monthBoxHeight = 20
 
@@ -14,7 +14,7 @@ export async function heatmap() {
   // 获取svg并定义svg高度和宽度
   const svg = d3.select('#calendarHeatmapContent').append('svg').attr('width', width).attr('height', height - 55)
   // 绘制图区
-  const { months, days } = await dataChart()
+  const {months, days} = await dataChart()
   monthCoordinate(width, margin, weekBoxWidth, svg, months)
   weekCoordinate(height, margin, monthBoxHeight, svg)
   await dateSquares(height, margin, weekBoxWidth, monthBoxHeight, svg, days)
@@ -42,6 +42,7 @@ function monthCoordinate(width, margin, weekBoxWidth, svg, months) {// 绘制月
     .attr('font-size', '12px')
     .attr('font-family', 'monospace')
     .attr('fill', '#5D6063')
+    // @ts-ignore
     .attr('x', (function (d, i) {
       return monthScale(i)
     }))
@@ -70,6 +71,7 @@ function weekCoordinate(height, margin, monthBoxHeight, svg) {
     })
     .attr('font-size', '12px')
     .attr('fill', '#5D6063')
+    // @ts-ignore
     .attr('y', (d, i) => {
       return weekScale(i)
     })
@@ -77,7 +79,6 @@ function weekCoordinate(height, margin, monthBoxHeight, svg) {
 
 async function dateSquares(height, margin, weekBoxWidth, monthBoxHeight, svg, days) {
   const color = colors()
-  console.log(color);
 
   const cellBox = svg
     .append('g')
@@ -116,6 +117,7 @@ async function dateSquares(height, margin, weekBoxWidth, monthBoxHeight, svg, da
       }
       return color[0]
     })
+    // @ts-ignore
     .attr('x', (d, i) => {
       if (i % 7 === 0) {
         cellCol++
@@ -123,6 +125,7 @@ async function dateSquares(height, margin, weekBoxWidth, monthBoxHeight, svg, da
       const x = (cellCol - 1) * cellSize
       return cellCol > 1 ? x + cellMargin * (cellCol - 1) : x
     })
+    // @ts-ignore
     .attr('y', (d, i) => {
       const y = i % 7
       return y > 0 ? y * cellSize + cellMargin * y : y * cellSize
@@ -143,12 +146,12 @@ async function queryDate() {
   let response
   if (localConfig === null) {
     const sql = `SELECT SUBSTR(created, 1, 8) AS date, COUNT(*) count FROM blocks WHERE type = 'p' GROUP BY SUBSTR(created, 1, 8) ORDER BY date DESC LIMIT 370`
-    response = await (await axios.post('/api/query/sql', { stmt: sql })).data.data
+    response = await (await axios.post('/api/query/sql', {stmt: sql})).data.data
   } else {
-    const { isdailyNote, ignore } = JSON.parse(localConfig)
+    const {isdailyNote, ignore} = JSON.parse(localConfig)
     if (isdailyNote === true) {
       const sql = `SELECT SUBSTR(created, 1, 8) AS date, COUNT(*) count FROM blocks WHERE type = 'p' AND  hpath LIKE '/daily note%' GROUP BY SUBSTR(created, 1, 8) ORDER BY date DESC LIMIT 370`
-      response = await (await axios.post('/api/query/sql', { stmt: sql })).data.data
+      response = await (await axios.post('/api/query/sql', {stmt: sql})).data.data
     } else if (ignore !== null && ignore !== undefined && ignore != '') {
       let sql = `SELECT SUBSTR(created, 1, 8) AS date, COUNT(*) count FROM blocks WHERE type = 'p' AND `
       const arrData = ignore.split(',')
@@ -156,10 +159,10 @@ async function queryDate() {
         sql = sql + `hpath NOT LIKE '/${arrData[i]}%' ${i === arrData.length - 1 ? '' : 'OR '}`
       }
       sql = sql + ` GROUP BY SUBSTR(created, 1, 8) ORDER BY date DESC LIMIT 370`
-      response = await (await axios.post('/api/query/sql', { stmt: sql })).data.data
+      response = await (await axios.post('/api/query/sql', {stmt: sql})).data.data
     } else {
       const sql = `SELECT SUBSTR(created, 1, 8) AS date, COUNT(*) count FROM blocks WHERE type = 'p' GROUP BY SUBSTR(created, 1, 8) ORDER BY date DESC LIMIT 370`
-      response = await (await axios.post('/api/query/sql', { stmt: sql })).data.data
+      response = await (await axios.post('/api/query/sql', {stmt: sql})).data.data
     }
   }
   return response
@@ -171,10 +174,10 @@ async function dataChart() {
   // 遍历数据
   if (resDate != null) {
     resDate.forEach(param => {
-      const { date, count } = param
+      const {date, count} = param
       // 格式化date，封装进新数组
       const formatDate = `${date.substring(0, 4)}-${(date.substring(4, 6) > 10 ? date.substring(4, 6) : date.substring(4, 6).substring(1, 2))}-${(date.substring(6, 8) > 10 ? date.substring(6, 8) : date.substring(6, 8).substring(1.2))}`
-      formatParams.push({ day: formatDate, total: count })
+      formatParams.push({day: formatDate, total: count})
     })
   }
 
@@ -190,7 +193,7 @@ async function dataChart() {
     let month: string | number = referDate.getMonth() + 1
 
     for (let j = 1; j <= referDate.getDate(); j++) {
-      let data = { date: referDate.getFullYear() + '-' + month + '-' + j, total: 0 }
+      let data = {date: referDate.getFullYear() + '-' + month + '-' + j, total: 0}
       formatParams.forEach(item => {
         if (item.day === data.date) {
           data.total = item.total
@@ -228,8 +231,8 @@ async function dataChart() {
         total = item.total
       }
     })
-    days.unshift({ date: formatDate.join('-'), total })
+    days.unshift({date: formatDate.join('-'), total})
   }
-  return { days, months }
+  return {days, months}
 }
 
