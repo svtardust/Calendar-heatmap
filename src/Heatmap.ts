@@ -106,11 +106,11 @@ async function dateSquares(height, margin, weekBoxWidth, monthBoxHeight, svg, da
       }
       let total = d.total
       if (total > 0) {
-        if (total <= 30) {
+        if (total <= 10) {
           return color[1]
-        } else if (total <= 70) {
+        } else if (total <= 30) {
           return color[2]
-        } else if (total <= 120) {
+        } else if (total <= 60) {
           return color[3]
         }
         return color[4]

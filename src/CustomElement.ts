@@ -6,16 +6,13 @@ export function viewElement() {
   // 包裹图层
   const divElement = document.createElement('div')
   divElement.setAttribute('id', 'openViewElement')
-  // divElement.setAttribute('style','background-color: white;')
-  // 文字显示及图标刷新区域
-  const topElement = document.createElement('div')
+  // @ts-ignore
+  divElement.setAttribute('style', `background-color: ${siyuan.config.appearance.mode === 0 ? '#FFFFFF' : '#0D1117'};`)
   // 今日块统计区域
-  const topLeftElement = document.createElement('div')
-  topLeftElement.setAttribute('id', 'StatisticalRegion')
-  topLeftElement.setAttribute('style', 'padding-left: 32px;letter-spacing: 1px;font-size: 12px;font-family: monospace; color: #5D6063')
-  topElement.appendChild(topLeftElement)
+  const topElement = document.createElement('div')
+  topElement.setAttribute('id', 'StatisticalRegion')
+  topElement.setAttribute('style', 'padding-left: 32px;letter-spacing: 1px;font-size: 12px;font-family: monospace; color: #5D6063')
   divElement.appendChild(topElement)
-
   // 热力图显示区域
   const calendarHeatmapContent = document.createElement('div')
   calendarHeatmapContent.setAttribute('id', 'calendarHeatmapContent')
