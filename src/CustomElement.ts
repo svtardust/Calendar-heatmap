@@ -24,6 +24,14 @@ export function viewElement() {
 }
 
 export const settingElement = `<div class='config__tab-container' id='heatmapSettingsDialog'>
+                                  <label class="fn__flex b3-label config__item">
+                                      <div class="fn__flex-1">
+                                          显示位置
+                                          <div class="b3-label__text">是否显示在顶栏左侧.重启后生效，默认显示在顶栏右侧</div>
+                                      </div>
+                                      <span class="fn__space"></span>
+                                      <input class='b3-switch fn__flex-center' id='calendarHeatmapConfigPosition' type='checkbox'>
+                                  </label>
                                   <lable class='fn__flex b3-label'>
                                     <div class='fn__flex-1'>
                                     日记
