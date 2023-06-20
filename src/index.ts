@@ -46,7 +46,9 @@ async function addOpenView(evt: MouseEvent) {
   menu.addItem({element: viewElement()})
   // 修改图区背景色 0亮色，1 暗色
   // @ts-ignore
-  document.getElementById('openViewElement').parentElement.style.backgroundColor = `${window.siyuan.config.appearance.mode === 0 ? '#FFFFFF' : '#0D1117'}`
+  document.getElementById('openViewElement').parentElement.style.backgroundColor = `${siyuan.config.appearance.mode === 0 ? '#FFFFFF' : '#0D1117'}`
+  // 此处解决与某些主题不适配问题
+  document.getElementById('openViewElement').parentElement.style.height = '160px'
   // 取消小手图标
   document.getElementById('openViewElement').parentElement.style.cursor = 'auto'
   // 加载数据
