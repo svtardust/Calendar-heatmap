@@ -5,7 +5,7 @@ import {loadData, setting} from './CustomEvents'
 /**
  * 思源笔记-日历热力图插件
  */
-module.exports = class CalendarHeatmap extends Plugin {
+export default class CalendarHeatmap extends Plugin {
   /**
    * 插件入口
    */

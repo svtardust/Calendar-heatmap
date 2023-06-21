@@ -10,8 +10,10 @@ export async function heatmap() {
   const monthBoxHeight = 20
 
   // 删除上一次作图
+  // @ts-ignore
   d3.select('#calendarHeatmapContent').selectAll('*').remove()
   // 获取svg并定义svg高度和宽度
+  // @ts-ignore
   const svg = d3.select('#calendarHeatmapContent').append('svg').attr('width', width).attr('height', height - 55)
   // 绘制图区
   const {months, days} = await dataChart()
@@ -20,17 +22,21 @@ export async function heatmap() {
   await dateSquares(height, margin, weekBoxWidth, monthBoxHeight, svg, days)
 }
 
-function monthCoordinate(width, margin, weekBoxWidth, svg, months) {// 绘制月坐标
+function monthCoordinate(width, margin, weekBoxWidth, svg, months) {
+  // 绘制月坐标
+  // @ts-ignore
   const monthBox = svg
     .append('g')
     .attr(
       'transform',
       'translate(' + (margin.left - 10) + ', ' + margin.top + ')',
     )
+  // @ts-ignore
   const monthScale = d3
     .scaleLinear()
     .domain([0, months.length])
     .range([20, width - weekBoxWidth + 10])
+  // @ts-ignore
   monthBox
     .selectAll('text')
     .data(months)
@@ -50,17 +56,20 @@ function monthCoordinate(width, margin, weekBoxWidth, svg, months) {// 绘制月
 
 function weekCoordinate(height, margin, monthBoxHeight, svg) {
   const weeks = ['一', '三', '五', '日']
+  // @ts-ignore
   const weekBox = svg
     .append('g')
     .attr(
       'transform',
       `translate(${margin.left - 20}, ${margin.top + monthBoxHeight})`,
     )
+  // @ts-ignore
   const weekScale = d3
     .scaleLinear()
     .domain([0, weeks.length])
     .range([0, height - margin.right - monthBoxHeight - 13])
 
+// @ts-ignore
   weekBox
     .selectAll('text')
     .data(weeks)
@@ -71,7 +80,6 @@ function weekCoordinate(height, margin, monthBoxHeight, svg) {
     })
     .attr('font-size', '12px')
     .attr('fill', '#5D6063')
-    // @ts-ignore
     .attr('y', (d, i) => {
       return weekScale(i)
     })
@@ -79,7 +87,7 @@ function weekCoordinate(height, margin, monthBoxHeight, svg) {
 
 async function dateSquares(height, margin, weekBoxWidth, monthBoxHeight, svg, days) {
   const color = colors()
-
+// @ts-ignore
   const cellBox = svg
     .append('g')
     .attr(
@@ -92,6 +100,7 @@ async function dateSquares(height, margin, weekBoxWidth, monthBoxHeight, svg, da
   const cellSize = (height - margin.right - monthBoxHeight - cellMargin * 6 - 30) / 7
   // 方块列计数器
   let cellCol = 0
+  // @ts-ignore
   const cell = cellBox
     .selectAll('rect')
     .data(days)

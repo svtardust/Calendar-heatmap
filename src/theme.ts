@@ -1,5 +1,5 @@
 export function colors() {
-  let data = []
+  let data: any[]
   // @ts-ignore
   if (siyuan.config.appearance.mode === 0) {
     data = ['#ebedf0', '#9be9a8', '#40c463', '#30a14e', '#216e39']
