@@ -154,7 +154,7 @@ async function dateSquares(height, margin, weekBoxWidth, monthBoxHeight, svg, da
   // 如果是当日日期边框显示为红色
   const date = new Date()
   const day = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
-  svg.select(`#heatmap-${day}`).style('stroke', '#FF0000').style('stroke-width', '1px')
+  svg.select(`#heatmap-${day}`).style('stroke', '#E34234').style('stroke-width', '1px')
 }
 
 async function queryDate() {
