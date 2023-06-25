@@ -101,7 +101,7 @@ async function dateSquares(height, margin, weekBoxWidth, monthBoxHeight, svg, da
   // 方块列计数器
   let cellCol = 0
   // @ts-ignore
-  const cell = cellBox
+  cellBox
     .selectAll('rect')
     .data(days)
     .enter()
@@ -109,6 +109,7 @@ async function dateSquares(height, margin, weekBoxWidth, monthBoxHeight, svg, da
     .attr('width', cellSize)
     .attr('height', cellSize)
     .attr('rx', 3)
+    // 颜色坐标
     .attr('fill', function (d) {
       if (d.total === undefined || d.total === 0) {
         return color[0]
@@ -126,7 +127,6 @@ async function dateSquares(height, margin, weekBoxWidth, monthBoxHeight, svg, da
       }
       return color[0]
     })
-    // @ts-ignore
     .attr('x', (d, i) => {
       if (i % 7 === 0) {
         cellCol++
@@ -134,20 +134,27 @@ async function dateSquares(height, margin, weekBoxWidth, monthBoxHeight, svg, da
       const x = (cellCol - 1) * cellSize
       return cellCol > 1 ? x + cellMargin * (cellCol - 1) : x
     })
-    // @ts-ignore
     .attr('y', (d, i) => {
       const y = i % 7
       return y > 0 ? y * cellSize + cellMargin * y : y * cellSize
     })
     .style('cursor', 'pointer')
-  // 日期方块添加鼠标移入时的数据提示
-  cell.append('title').text((d) => {
+    // 唯一标识
+    .attr('id', d => {
+      return `heatmap-${d.date}`
+    })
+    // 日期方块添加鼠标移入时的数据提示
+    .append('title').text((d) => {
     let message = '没有内容块'
     if (d.total != 0 || d.total != undefined) {
-      message = '有 ' + d.total + '个内容块'
+      message = '有' + d.total + '个内容块'
     }
     return d.date + '\n' + message
   })
+  // 如果是当日日期边框显示为红色
+  const date = new Date()
+  const day = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+  svg.select(`#heatmap-${day}`).style('stroke', '#FF0000').style('stroke-width', '1px')
 }
 
 async function queryDate() {

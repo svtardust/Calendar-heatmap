@@ -40,7 +40,7 @@ export function setting() {
 
 async function statisticalRegionData() {
   const date = new Date()
-  const day = date.getFullYear() + '年' + (date.getMonth() + 1) + '月' + date.getDate() + '日'
+  const day =`${date.getFullYear()}年${(date.getMonth() + 1)}月${date.getDate()}日`
 
   const createSql = `SELECT count(*) AS count FROM blocks WHERE type = 'p' AND created > strftime('%Y%m%d','now','localtime')`
   const updateSql = `SELECT count(*) AS count FROM blocks WHERE type = 'p' AND updated > strftime('%Y%m%d','now','localtime') AND length <> 0`
