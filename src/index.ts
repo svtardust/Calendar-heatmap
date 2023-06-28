@@ -48,7 +48,7 @@ async function addOpenView(evt: MouseEvent) {
   // @ts-ignore
   document.getElementById('openViewElement').parentElement.style.backgroundColor = `${siyuan.config.appearance.mode === 0 ? '#FFFFFF' : '#0D1117'}`
   // 此处解决与某些主题不适配问题
-  document.getElementById('openViewElement').parentElement.style.height = '165px'
+  document.getElementById('openViewElement').parentElement.style.height = '168px'
   // 取消小手图标
   document.getElementById('openViewElement').parentElement.style.cursor = 'auto'
   // 取消默认边距，边框
