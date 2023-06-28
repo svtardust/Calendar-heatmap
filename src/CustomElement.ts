@@ -17,7 +17,7 @@ export function viewElement() {
   divElement.setAttribute('style', `background-color: ${siyuan.config.appearance.mode === 0 ? '#FFFFFF' : '#0D1117'};`)
   // 今日块统计区域
   const topElement = document.createElement('div')
-  topElement.setAttribute('style','letter-spacing: 1px;font-size: 11px;font-family: monospace; color: #5D6063; height:30px')
+  topElement.setAttribute('style','letter-spacing: 1px;font-size: 12px;font-family: monospace; color: #5D6063; height:30px')
   const topLeftElement = document.createElement('div');
   topLeftElement.setAttribute('id', 'StatisticalRegion')
   topLeftElement.setAttribute('style', 'padding-left: 32px;')
