@@ -1,8 +1,11 @@
+import {colors} from "./theme";
+
 /**
  * 绘制图区
  * @returns element
  */
 export function viewElement() {
+  let color = ''
   // 包裹图层
   const divElement = document.createElement('div')
   divElement.setAttribute('id', 'openViewElement')
@@ -10,9 +13,18 @@ export function viewElement() {
   divElement.setAttribute('style', `background-color: ${siyuan.config.appearance.mode === 0 ? '#FFFFFF' : '#0D1117'};`)
   // 今日块统计区域
   const topElement = document.createElement('div')
-  topElement.setAttribute('id', 'StatisticalRegion')
-  topElement.setAttribute('style', 'padding-left: 32px;letter-spacing: 1px;font-size: 12px;font-family: monospace; color: #5D6063')
+  topElement.setAttribute('style','letter-spacing: 1px;font-size: 11px;font-family: monospace; color: #5D6063; height:30px')
+  const topLeftElement = document.createElement('div');
+  topLeftElement.setAttribute('id', 'StatisticalRegion')
+  topLeftElement.setAttribute('style', 'padding-left: 32px;')
+  topLeftElement.style.float = 'left'
+  topElement.appendChild(topLeftElement)
+  colors().forEach(item => {
+    color = color + (`<span style="width: 10px; height: 10px; display:block; float:left; background-color: ${item}; margin-left: 1px; margin-top: 10px; border-radius: 2px"></span>`)
+  })
+  topElement.insertAdjacentHTML('beforeend', `<div style="float: right; padding-right: 10px;"><span style="float: left; padding-right: 3px; padding-top: 2px;">少</span><span>${color}</span><span style="padding-left: 5px; padding-top: 2px;">多</span></div>`)
   divElement.appendChild(topElement)
+
   // 热力图显示区域
   const calendarHeatmapContent = document.createElement('div')
   calendarHeatmapContent.setAttribute('id', 'calendarHeatmapContent')
