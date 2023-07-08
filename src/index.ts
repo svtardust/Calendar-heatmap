@@ -41,7 +41,7 @@ export default class CalendarHeatmap extends Plugin {
  * @param evt 鼠标事件
  */
 async function addOpenView(evt: MouseEvent) {
-  const menu = new Menu()
+  const menu = new Menu('Calendar-heatmap')
   // 加载图区
   menu.addItem({element: viewElement()})
   // 修改图区背景色 0亮色，1 暗色

@@ -10,10 +10,8 @@ export async function heatmap() {
   const monthBoxHeight = 20
 
   // 删除上一次作图
-  // @ts-ignore
   d3.select('#calendarHeatmapContent').selectAll('*').remove()
   // 获取svg并定义svg高度和宽度
-  // @ts-ignore
   const svg = d3.select('#calendarHeatmapContent').append('svg').attr('width', width).attr('height', height - 55)
   // 绘制图区
   const {months, days} = await dataChart()
@@ -87,7 +85,6 @@ function weekCoordinate(height, margin, monthBoxHeight, svg) {
 
 async function dateSquares(height, margin, weekBoxWidth, monthBoxHeight, svg, days) {
   const color = colors()
-// @ts-ignore
   const cellBox = svg
     .append('g')
     .attr(
