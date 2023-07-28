@@ -67,7 +67,7 @@ function weekCoordinate(height, margin, monthBoxHeight, svg) {
     .domain([0, weeks.length])
     .range([0, height - margin.right - monthBoxHeight - 13])
 
-// @ts-ignore
+  // @ts-ignore
   weekBox
     .selectAll('text')
     .data(weeks)
