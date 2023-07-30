@@ -1,4 +1,5 @@
 # Calendar-heatmap
+
 思源笔记-日历热力图插件
 
 针对[思源笔记](https://b3log.org/siyuan/) 做的一个日历热力图插件，可统计最近12个月每日所创建的内容块
@@ -68,9 +69,11 @@ test
 
 ## 5. 如果使用过程中出现问题怎么办？
 
-如果使用过程中出现与本插件相关的错误，请到 [https://github.com/svtardust/Calendar-heatmap/issues](https://github.com/svtardust/Calendar-heatmap/issues) 页面下点击New issue 提交问题及问题信息
+如果使用过程中出现与本插件相关的错误，请到 [https://github.com/svtardust/Calendar-heatmap/issues](https://github.com/svtardust/Calendar-heatmap/issues)
+页面下点击New issue 提交问题及问题信息
 
 ## 6. 通知
+
 Calendar-heatmap 版本v0.0.3（包含）以前为挂件版本，如果想用使用可以去https://github.com/svtardust/Calendar-heatmap/releases/tag/v0.0.3
 下载。
 
@@ -78,7 +81,7 @@ Calendar-heatmap 版本v0.0.3（包含）以前为挂件版本，如果想用使
 
 **主要更新**
 
-1. 优化交互逻辑，与思源按钮点击交互保持一致，改为点击展开，再次点击关闭
+1. 修复勾选显示位置在顶栏左侧后，重启失效问题
 
 具体可看[变更日志](CHANGELOG.md)
 
