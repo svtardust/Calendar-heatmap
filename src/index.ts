@@ -9,13 +9,27 @@ export default class CalendarHeatmap extends Plugin {
   /**
    * 插件入口
    */
-  onload() {
+  async onload() {
+    const defaultConfig = {
+      lightColor: ['#ebedf0', '#9be9a8', '#40c463', '#30a14e', '#216e39'],
+      darkColor: ['#161B22', '#0E4429', '#006D32', '#26A641', '#39D353'],
+      customColor: [],
+      // 是否只统计日记
+      isdailyNote: false,
+      // 是否显示在左侧
+      heatmapPosition: false,
+      // 忽略文件
+      ignoreText: ''
+    }
     let heatPosition: 'right' | 'left' = 'right'
-    const heatmapConfig = localStorage.getItem('calendar-heatmap-config')
-    if (heatmapConfig != null) {
-      const {heatmapPosition} = JSON.parse(heatmapConfig)
-      if (heatmapPosition != undefined) {
-        heatPosition = heatmapPosition === true ? 'left' : 'right'
+    const heatmapConfig = await this.loadData('config.json')
+    if (heatmapConfig === null || heatmapConfig === "") {
+      console.log(JSON.stringify(defaultConfig))
+      await this.saveData('config.json', JSON.stringify(defaultConfig))
+    } else {
+      const {heatmapPosition} = heatmapConfig
+      if (heatmapPosition === true) {
+        heatPosition = 'left'
       }
     }
     this.addTopBar({
@@ -28,11 +42,15 @@ export default class CalendarHeatmap extends Plugin {
     })
   }
 
+  async onunload() {
+    await this.removeData('config.json')
+  }
+
   /**
    * 设置窗口
    */
-  openSetting(): void {
-    setting()
+  async openSetting(): void {
+    await setting()
   }
 }
 
@@ -43,7 +61,7 @@ export default class CalendarHeatmap extends Plugin {
 async function addOpenView(evt: MouseEvent) {
   const menu = new Menu('Calendar-heatmap')
   // 加载图区
-  menu.addItem({element: viewElement()})
+  menu.addItem({element: await viewElement()})
   // 修改图区背景色 0亮色，1 暗色
   // @ts-ignore
   document.getElementById('openViewElement').parentElement.style.backgroundColor = `${siyuan.config.appearance.mode === 0 ? '#FFFFFF' : '#0D1117'}`

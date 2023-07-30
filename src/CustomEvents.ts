@@ -2,6 +2,7 @@ import {Dialog} from 'siyuan'
 import {heatmap} from './Heatmap'
 import {settingElement} from './CustomElement'
 import axios from 'axios'
+import {getData, saveData} from "./utils";
 
 /**
  * 加载数据，填充图区
@@ -17,21 +18,18 @@ export async function loadData() {
 /**
  * 设置
  */
-export function setting() {
+export async function setting() {
   const dialog = new Dialog({
     title: '日历热力图设置',
     content: settingElement,
     width: '800px',
     height: '400px',
   })
-  const localConfig = localStorage.getItem('calendar-heatmap-config')
-  if (localConfig != null) {
-    const {isdailyNote, ignore, heatmapPosition} = JSON.parse(localConfig)
-    document.getElementById('calendarHeatmapConfigCheckbox')['checked'] = isdailyNote
-    document.getElementById('calendarHeatmapConfigPosition')['checked'] = heatmapPosition
-    if (ignore != null) {
-      document.getElementById('calendarHeatmapConfigText')['value'] = ignore
-    }
+  const {isdailyNote, heatmapPosition, ignoreText} = await getData()
+  document.getElementById('calendarHeatmapConfigCheckbox')['checked'] = isdailyNote
+  document.getElementById('calendarHeatmapConfigPosition')['checked'] = heatmapPosition
+  if (ignoreText != null) {
+    document.getElementById('calendarHeatmapConfigText')['value'] = ignoreText
   }
   dialog.element.querySelector('#calendarHeatmapConfigCheckbox').addEventListener('click', calendarHeatmapConfigCheckd)
   dialog.element.querySelector('#calendarHeatmapConfigText').addEventListener('input', calendarHeatmapConfigtextarea)
@@ -40,7 +38,7 @@ export function setting() {
 
 async function statisticalRegionData() {
   const date = new Date()
-  const day =`${date.getFullYear()}年${(date.getMonth() + 1)}月${date.getDate()}日`
+  const day = `${date.getFullYear()}年${(date.getMonth() + 1)}月${date.getDate()}日`
 
   const createSql = `SELECT count(*) AS count FROM blocks WHERE type = 'p' AND created > strftime('%Y%m%d','now','localtime')`
   const updateSql = `SELECT count(*) AS count FROM blocks WHERE type = 'p' AND updated > strftime('%Y%m%d','now','localtime') AND length <> 0`
@@ -49,65 +47,44 @@ async function statisticalRegionData() {
   document.getElementById('StatisticalRegion').innerText = `今日${day},共创建${createCount}个内容块，共修改${updateCount}个内容块`
 }
 
-function calendarHeatmapConfigPosition(event) {
+async function calendarHeatmapConfigPosition(event) {
   const checked = event.target.checked
-  const localHeatmapConfig = localStorage.getItem('calendar-heatmap-config')
-  let isdailyNote = false
-  let ignore: string
-  if (localHeatmapConfig !== null) {
-    isdailyNote = JSON.parse(localHeatmapConfig).isdailyNote
-    ignore = JSON.parse(localHeatmapConfig).ignore
-  }
+  const heatmapConfig = await getData()
   if (checked) {
-    localStorage.setItem('calendar-heatmap-config', JSON.stringify({
-      heatmapPosition: true,
-      isdailyNote: isdailyNote,
-      ignore: ignore
-    }))
+    heatmapConfig.heatmapPosition = true
+    await saveData(JSON.stringify(heatmapConfig))
     document.getElementById('calendarHeatmapConfigPosition')['checked'] = true
   } else {
-    localStorage.setItem('calendar-heatmap-config', JSON.stringify({
-      heatmapPosition: false,
-      isdailyNote: isdailyNote,
-      ignore: ignore
-    }))
+    heatmapConfig.heatmapPosition = false
+    await saveData(JSON.stringify(heatmapConfig))
     document.getElementById('calendarHeatmapConfigPosition')['checked'] = false
   }
 }
 
-function calendarHeatmapConfigCheckd(event) {
+async function calendarHeatmapConfigCheckd(event) {
   const checked = event.target.checked
-  const localHeatmapConfig = localStorage.getItem('calendar-heatmap-config')
-  let heatmapPosition = false
-  if (localHeatmapConfig !== null) {
-    heatmapPosition = JSON.parse(localHeatmapConfig).heatmapPosition
-  }
+  const heatmapConfig = await getData()
   if (checked) {
-    localStorage.setItem('calendar-heatmap-config', JSON.stringify({
-      heatmapPosition: heatmapPosition,
-      isdailyNote: true
-    }))
+    heatmapConfig.isdailyNote = true
+    heatmapConfig.ignoreText = ''
     document.getElementById('calendarHeatmapConfigCheckbox')['checked'] = true
     document.getElementById('calendarHeatmapConfigText')['value'] = ''
+    await saveData(JSON.stringify(heatmapConfig))
   } else {
-    localStorage.setItem('calendar-heatmap-config', JSON.stringify({
-      heatmapPosition: heatmapPosition,
-      isdailyNote: false
-    }))
+    heatmapConfig.isdailyNote = false
     document.getElementById('calendarHeatmapConfigCheckbox')['checked'] = false
+    await saveData(JSON.stringify(heatmapConfig))
   }
 
 }
 
-function calendarHeatmapConfigtextarea(event) {
+async function calendarHeatmapConfigtextarea(event) {
   const text = event.target.value
-  const localHeatmapConfig = localStorage.getItem('calendar-heatmap-config')
-  let heatmapPosition = false
-  if (localHeatmapConfig !== null) {
-    heatmapPosition = JSON.parse(localHeatmapConfig).heatmapPosition
-  }
+  const heatmapConfig = await getData()
   if (text != null) {
+    heatmapConfig.isdailyNote = false
+    heatmapConfig.ignoreText = text
     document.getElementById('calendarHeatmapConfigCheckbox')['checked'] = false
-    localStorage.setItem('calendar-heatmap-config', JSON.stringify({heatmapPosition, checked: false, ignore: text}))
+    await saveData(JSON.stringify(heatmapConfig))
   }
 }

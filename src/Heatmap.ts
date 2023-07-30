@@ -1,6 +1,6 @@
 import * as d3 from 'd3'
 import axios from 'axios'
-import {colors} from './theme'
+import {getColor, getData} from "./utils";
 
 export async function heatmap() {
   const width = 815
@@ -83,8 +83,17 @@ function weekCoordinate(height, margin, monthBoxHeight, svg) {
     })
 }
 
+/**
+ * 日期方块
+ * @param height 高度
+ * @param margin 边距
+ * @param weekBoxWidth 周宽度
+ * @param monthBoxHeight 月宽度
+ * @param svg svg参数
+ * @param days 所有日期
+ */
 async function dateSquares(height, margin, weekBoxWidth, monthBoxHeight, svg, days) {
-  const color = colors()
+  const color = await getColor()
   const cellBox = svg
     .append('g')
     .attr(
@@ -155,28 +164,22 @@ async function dateSquares(height, margin, weekBoxWidth, monthBoxHeight, svg, da
 }
 
 async function queryDate() {
-  const localConfig = localStorage.getItem('calendar-heatmap-config')
+  const {isdailyNote, ignoreText} = await getData()
   let response
-  if (localConfig === null) {
-    const sql = `SELECT SUBSTR(created, 1, 8) AS date, COUNT(*) count FROM blocks WHERE type = 'p' GROUP BY SUBSTR(created, 1, 8) ORDER BY date DESC LIMIT 370`
+  if (isdailyNote === true) {
+    const sql = `SELECT SUBSTR(created, 1, 8) AS date, COUNT(*) count FROM blocks WHERE type = 'p' AND  hpath LIKE '/daily note%' GROUP BY SUBSTR(created, 1, 8) ORDER BY date DESC LIMIT 370`
+    response = await (await axios.post('/api/query/sql', {stmt: sql})).data.data
+  } else if (ignoreText !== null && ignoreText !== undefined && ignoreText != '') {
+    let sql = `SELECT SUBSTR(created, 1, 8) AS date, COUNT(*) count FROM blocks WHERE type = 'p' AND `
+    const arrData = ignore.split(',')
+    for (let i = 0; i < arrData.length; i++) {
+      sql = sql + `hpath NOT LIKE '/${arrData[i]}%' ${i === arrData.length - 1 ? '' : 'OR '}`
+    }
+    sql = sql + ` GROUP BY SUBSTR(created, 1, 8) ORDER BY date DESC LIMIT 370`
     response = await (await axios.post('/api/query/sql', {stmt: sql})).data.data
   } else {
-    const {isdailyNote, ignore} = JSON.parse(localConfig)
-    if (isdailyNote === true) {
-      const sql = `SELECT SUBSTR(created, 1, 8) AS date, COUNT(*) count FROM blocks WHERE type = 'p' AND  hpath LIKE '/daily note%' GROUP BY SUBSTR(created, 1, 8) ORDER BY date DESC LIMIT 370`
-      response = await (await axios.post('/api/query/sql', {stmt: sql})).data.data
-    } else if (ignore !== null && ignore !== undefined && ignore != '') {
-      let sql = `SELECT SUBSTR(created, 1, 8) AS date, COUNT(*) count FROM blocks WHERE type = 'p' AND `
-      const arrData = ignore.split(',')
-      for (let i = 0; i < arrData.length; i++) {
-        sql = sql + `hpath NOT LIKE '/${arrData[i]}%' ${i === arrData.length - 1 ? '' : 'OR '}`
-      }
-      sql = sql + ` GROUP BY SUBSTR(created, 1, 8) ORDER BY date DESC LIMIT 370`
-      response = await (await axios.post('/api/query/sql', {stmt: sql})).data.data
-    } else {
-      const sql = `SELECT SUBSTR(created, 1, 8) AS date, COUNT(*) count FROM blocks WHERE type = 'p' GROUP BY SUBSTR(created, 1, 8) ORDER BY date DESC LIMIT 370`
-      response = await (await axios.post('/api/query/sql', {stmt: sql})).data.data
-    }
+    const sql = `SELECT SUBSTR(created, 1, 8) AS date, COUNT(*) count FROM blocks WHERE type = 'p' GROUP BY SUBSTR(created, 1, 8) ORDER BY date DESC LIMIT 370`
+    response = await (await axios.post('/api/query/sql', {stmt: sql})).data.data
   }
   return response
 }
