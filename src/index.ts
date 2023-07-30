@@ -24,7 +24,6 @@ export default class CalendarHeatmap extends Plugin {
     let heatPosition: 'right' | 'left' = 'right'
     const heatmapConfig = await this.loadData('config.json')
     if (heatmapConfig === null || heatmapConfig === "") {
-      console.log(JSON.stringify(defaultConfig))
       await this.saveData('config.json', JSON.stringify(defaultConfig))
     } else {
       const {heatmapPosition} = heatmapConfig
@@ -49,7 +48,7 @@ export default class CalendarHeatmap extends Plugin {
   /**
    * 设置窗口
    */
-  async openSetting(): void {
+  async openSetting() {
     await setting()
   }
 }
