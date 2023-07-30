@@ -25,15 +25,23 @@ export async function setting() {
     width: '800px',
     height: '400px',
   })
-  const {isdailyNote, heatmapPosition, ignoreText} = await getData()
+  const {isdailyNote, heatmapPosition, ignoreText, customColor} = await getData()
   document.getElementById('calendarHeatmapConfigCheckbox')['checked'] = isdailyNote
   document.getElementById('calendarHeatmapConfigPosition')['checked'] = heatmapPosition
   if (ignoreText != null) {
     document.getElementById('calendarHeatmapConfigText')['value'] = ignoreText
   }
+  if (customColor.length != 0) {
+    let color = ''
+    customColor.forEach(item => {
+      color = color + `${color === '' ? '' : ','}` + item
+    })
+    document.getElementById('calendarHeatmapConfigColor')['value'] = color
+  }
   dialog.element.querySelector('#calendarHeatmapConfigCheckbox').addEventListener('click', calendarHeatmapConfigCheckd)
-  dialog.element.querySelector('#calendarHeatmapConfigText').addEventListener('input', calendarHeatmapConfigtextarea)
   dialog.element.querySelector('#calendarHeatmapConfigPosition').addEventListener('click', calendarHeatmapConfigPosition)
+  dialog.element.querySelector('#calendarHeatmapConfigColor').addEventListener('input', calendarHeatmapConfigColor)
+  dialog.element.querySelector('#calendarHeatmapConfigText').addEventListener('input', calendarHeatmapConfigtextarea)
 }
 
 async function statisticalRegionData() {
@@ -86,5 +94,18 @@ async function calendarHeatmapConfigtextarea(event) {
     heatmapConfig.ignoreText = text
     document.getElementById('calendarHeatmapConfigCheckbox')['checked'] = false
     await saveData(JSON.stringify(heatmapConfig))
+  }
+}
+
+async function calendarHeatmapConfigColor(event) {
+  const text = event.target.value
+  const heatmapConfig = await getData();
+  const index = text.indexOf(',');
+  if (index != -1) {
+    const arrData = text.split(',')
+    if (arrData.length === 5) {
+      heatmapConfig.customColor = arrData
+      await saveData(JSON.stringify(heatmapConfig))
+    }
   }
 }
