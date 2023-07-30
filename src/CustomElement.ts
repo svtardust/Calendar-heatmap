@@ -53,6 +53,16 @@ export const settingElement = `<div class='config__tab-container' id='heatmapSet
                                   </lable>
                                   <label class='b3-label fn__flex'>
                                     <div class='fn__flex-1'>
+                                      自定义配色
+                                      <div class="b3-label__text">请使用英文状态下的逗号 <code class="fn__code">,</code> 进行分隔，请输入五种配色，请使用<code class="fn__code">HEX</code>颜色，例子：<code class="fn_code">#ebedf0,#9be9a8,#40c463,#30a14e,#216e39</code></div>
+                                      <div class='fn__hr'></div>
+                                      <textarea class='b3-text-field fn__block' 
+                                                id='calendarHeatmapConfigColor' 
+                                                style='height: 30px;' placeholder=''></textarea>
+                                    </div>
+                                  </label>
+                                  <label class='b3-label fn__flex'>
+                                    <div class='fn__flex-1'>
                                       忽略统计文件
                                       <div class='b3-label__text'>请输入所需忽略的文件，并用英文逗号隔开</div>
                                       <div class='fn__hr'></div>
