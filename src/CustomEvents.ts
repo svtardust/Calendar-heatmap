@@ -107,5 +107,8 @@ async function calendarHeatmapConfigColor(event) {
       heatmapConfig.customColor = arrData
       await saveData(JSON.stringify(heatmapConfig))
     }
+  } else {
+    heatmapConfig.customColor = text
+    await saveData(JSON.stringify(heatmapConfig))
   }
 }
