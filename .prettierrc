@@ -12,6 +12,6 @@
   "requireConfig": false,
   "stylelintIntegration": false,
   "trailingComma": "es5",
-  "tslintIntegration": false,
+  "tslintIntegration": false
 }
 
