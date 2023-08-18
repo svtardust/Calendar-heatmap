@@ -25,6 +25,7 @@ export async function setting() {
     width: '800px',
     height: '400px',
   })
+  // 加载配置文件并赋值
   const {isdailyNote, heatmapPosition, ignoreText, customColor} = await getData()
   document.getElementById('calendarHeatmapConfigCheckbox')['checked'] = isdailyNote
   document.getElementById('calendarHeatmapConfigPosition')['checked'] = heatmapPosition
@@ -38,6 +39,7 @@ export async function setting() {
     })
     document.getElementById('calendarHeatmapConfigColor')['value'] = color
   }
+  // 绑定事件
   dialog.element.querySelector('#calendarHeatmapConfigCheckbox').addEventListener('click', calendarHeatmapConfigCheckd)
   dialog.element.querySelector('#calendarHeatmapConfigPosition').addEventListener('click', calendarHeatmapConfigPosition)
   dialog.element.querySelector('#calendarHeatmapConfigColor').addEventListener('input', calendarHeatmapConfigColor)
@@ -55,6 +57,10 @@ async function statisticalRegionData() {
   document.getElementById('StatisticalRegion').innerText = `今日${day},共创建${createCount}个内容块，共修改${updateCount}个内容块`
 }
 
+/**
+ * 图标显示位置
+ * @param event 事件
+ */
 async function calendarHeatmapConfigPosition(event) {
   const checked = event.target.checked
   const heatmapConfig = await getData()
@@ -69,6 +75,10 @@ async function calendarHeatmapConfigPosition(event) {
   }
 }
 
+/**
+ * 日记模式
+ * @param event 事件
+ */
 async function calendarHeatmapConfigCheckd(event) {
   const checked = event.target.checked
   const heatmapConfig = await getData()
@@ -86,6 +96,10 @@ async function calendarHeatmapConfigCheckd(event) {
 
 }
 
+/**
+ * 忽略文件
+ * @param event 事件
+ */
 async function calendarHeatmapConfigtextarea(event) {
   const text = event.target.value
   const heatmapConfig = await getData()
@@ -97,6 +111,10 @@ async function calendarHeatmapConfigtextarea(event) {
   }
 }
 
+/**
+ * 自定义配色
+ * @param event 事件
+ */
 async function calendarHeatmapConfigColor(event) {
   const text = event.target.value
   const heatmapConfig = await getData();

@@ -41,10 +41,6 @@ export default class CalendarHeatmap extends Plugin {
     })
   }
 
-  async onunload() {
-    await this.removeData('config.json')
-  }
-
   /**
    * 设置窗口
    */
