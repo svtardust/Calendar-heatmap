@@ -165,7 +165,6 @@ async function dateSquares(height, margin, weekBoxWidth, monthBoxHeight, svg, da
 
 async function queryDate() {
   const {isdailyNote, ignoreText} = await getData()
-  console.log(isdailyNote, ignoreText)
   let response
   if (isdailyNote === true) {
     const sql = `SELECT SUBSTR(created, 1, 8) AS date, COUNT(*) count FROM blocks WHERE type = 'p' AND  hpath LIKE '/daily note%' GROUP BY SUBSTR(created, 1, 8) ORDER BY date DESC LIMIT 370`
@@ -174,9 +173,13 @@ async function queryDate() {
     let sql = `SELECT SUBSTR(created, 1, 8) AS date, COUNT(*) count FROM blocks WHERE type = 'p' AND `
     const arrData = ignoreText.split(',')
     for (let i = 0; i < arrData.length; i++) {
-      sql = sql + `hpath NOT LIKE '/${arrData[i]}%' ${i === arrData.length - 1 ? '' : 'OR '}`
+      if (arrData[i].indexOf('#') === 0) {
+        sql = sql + `box <> '${arrData[i].substring(1)}' ${i === arrData.length - 1 ? '' : 'AND '} `
+      } else {
+        sql = sql + `hpath NOT LIKE '/${arrData[i]}%' ${i === arrData.length - 1 ? '' : 'AND '} `
+      }
     }
-    sql = sql + ` GROUP BY SUBSTR(created, 1, 8) ORDER BY date DESC LIMIT 370`
+    sql = sql + `GROUP BY SUBSTR(created, 1, 8) ORDER BY date DESC LIMIT 370 `
     response = await (await axios.post('/api/query/sql', {stmt: sql})).data.data
   } else {
     const sql = `SELECT SUBSTR(created, 1, 8) AS date, COUNT(*) count FROM blocks WHERE type = 'p' GROUP BY SUBSTR(created, 1, 8) ORDER BY date DESC LIMIT 370`
