@@ -2,7 +2,7 @@
   "name": "Calendar-heatmap",
   "author": "svtardust",
   "url": "https://github.com/svtardust/Calendar-heatmap",
-  "version": "1.0.18",
+  "version": "1.0.19",
   "minAppVersion": "2.8.10",
   "backends": [
     "windows",
