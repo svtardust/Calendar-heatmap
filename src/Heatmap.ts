@@ -17,7 +17,6 @@ export async function heatmap() {
   const svg = d3.select('#calendarHeatmapContent').append('svg').attr('width', width).attr('height', height - 55)
   // 绘制图区
   const { months, days } = await dataChart()
-  console.log(days);
   
   monthCoordinate(width, margin, weekBoxWidth, svg, months)
   weekCoordinate(height, margin, monthBoxHeight, svg)
@@ -223,7 +222,6 @@ async function dataChart() {
     resDate.forEach(param => {
       const { date, count } = param
       // 格式化date，封装进新数组
-      console.log(date);
       const formatDate = `${date.substring(0, 4)}-${(date.substring(4, 6) >= 10 ? date.substring(4, 6) : date.substring(4, 6).substring(1, 2))}-${(date.substring(6, 8) > 10 ? date.substring(6, 8) : date.substring(6, 8).substring(1.2))}`
       formatParams.push({ day: formatDate, total: count })
     })
