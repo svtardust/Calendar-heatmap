@@ -1,3 +1,7 @@
+- 1.0.19
+
+1. 修复热力图10月份未显示问题[#42](https://github.com/svtardust/Calendar-heatmap/issues/42)
+
 - 1.0.18
 
 1. 日历热力图月份显示混乱，有重复和缺失月份 [#40](https://github.com/svtardust/Calendar-heatmap/issues/40)
