@@ -1,6 +1,6 @@
-import {Menu, Plugin} from 'siyuan'
-import {viewElement} from './CustomElement'
-import {loadData, setting} from './CustomEvents'
+import { Menu, Plugin } from 'siyuan';
+import { viewElement } from './CustomElement';
+import { loadData, setting } from './CustomEvents';
 
 /**
  * 思源笔记-日历热力图插件
@@ -19,16 +19,16 @@ export default class CalendarHeatmap extends Plugin {
       // 是否显示在左侧
       heatmapPosition: false,
       // 忽略文件
-      ignoreText: ''
-    }
-    let heatPosition: 'right' | 'left' = 'right'
-    const heatmapConfig = await this.loadData('config.json')
-    if (heatmapConfig === null || heatmapConfig === "") {
-      await this.saveData('config.json', JSON.stringify(defaultConfig))
+      ignoreText: '',
+    };
+    let heatPosition: 'right' | 'left' = 'right';
+    const heatmapConfig = await this.loadData('config.json');
+    if (heatmapConfig === null || heatmapConfig === '') {
+      await this.saveData('config.json', JSON.stringify(defaultConfig));
     } else {
-      const {heatmapPosition} = heatmapConfig
+      const { heatmapPosition } = heatmapConfig;
       if (heatmapPosition === true) {
-        heatPosition = 'left'
+        heatPosition = 'left';
       }
     }
     this.addTopBar({
@@ -36,16 +36,16 @@ export default class CalendarHeatmap extends Plugin {
       title: '日历热力图',
       position: heatPosition,
       callback: async (evt) => {
-        await addOpenView(evt)
+        await addOpenView(evt);
       },
-    })
+    });
   }
 
   /**
    * 设置窗口
    */
   async openSetting() {
-    await setting()
+    await setting();
   }
 }
 
@@ -54,23 +54,23 @@ export default class CalendarHeatmap extends Plugin {
  * @param evt 鼠标事件
  */
 async function addOpenView(evt: MouseEvent) {
-  const menu = new Menu('Calendar-heatmap')
+  const menu = new Menu('Calendar-heatmap');
   // 加载图区
-  menu.addItem({element: await viewElement()})
+  menu.addItem({ element: await viewElement() });
   // 修改图区背景色 0亮色，1 暗色
   // @ts-ignore
-  document.getElementById('openViewElement').parentElement.style.backgroundColor = `${siyuan.config.appearance.mode === 0 ? '#FFFFFF' : '#0D1117'}`
+  document.getElementById('openViewElement').parentElement.style.backgroundColor = `${siyuan.config.appearance.mode === 0 ? '#FFFFFF' : '#0D1117'}`;
   // 此处解决与某些主题不适配问题
-  document.getElementById('openViewElement').parentElement.style.height = '168px'
+  document.getElementById('openViewElement').parentElement.style.height = '168px';
   // 取消小手图标
-  document.getElementById('openViewElement').parentElement.style.cursor = 'auto'
+  document.getElementById('openViewElement').parentElement.style.cursor = 'auto';
   // 取消默认边距，边框
-  document.getElementById('openViewElement').parentElement.parentElement.parentElement.style.padding = '0px'
-  document.getElementById('openViewElement').parentElement.parentElement.parentElement.style.border = '0px'
+  document.getElementById('openViewElement').parentElement.parentElement.parentElement.style.padding = '0px';
+  document.getElementById('openViewElement').parentElement.parentElement.parentElement.style.border = '0px';
   // 加载数据
-  await loadData()
+  await loadData();
   menu.open({
     x: evt.x,
     y: evt.y,
-  })
+  });
 }
