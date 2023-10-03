@@ -17,11 +17,21 @@ export async function heatmap() {
   const svg = d3.select('#calendarHeatmapContent').append('svg').attr('width', width).attr('height', height - 55)
   // 绘制图区
   const { months, days } = await dataChart()
+  console.log(days);
+  
   monthCoordinate(width, margin, weekBoxWidth, svg, months)
   weekCoordinate(height, margin, monthBoxHeight, svg)
   await dateSquares(height, margin, weekBoxWidth, monthBoxHeight, svg, days)
 }
 
+/**
+ * 绘制月
+ * @param width 宽度
+ * @param margin 边距
+ * @param weekBoxWidth 周宽度
+ * @param svg 图区
+ * @param months 月数据
+ */
 function monthCoordinate(width, margin, weekBoxWidth, svg, months) {
   // 绘制月坐标
   // @ts-ignore
@@ -54,6 +64,13 @@ function monthCoordinate(width, margin, weekBoxWidth, svg, months) {
     }))
 }
 
+/**
+ * 绘制周
+ * @param height 高度
+ * @param margin 边距
+ * @param monthBoxHeight 与方块高度
+ * @param svg 图区
+ */
 function weekCoordinate(height, margin, monthBoxHeight, svg) {
   const weeks = ['一', '三', '五', '日']
   // @ts-ignore
@@ -80,6 +97,7 @@ function weekCoordinate(height, margin, monthBoxHeight, svg) {
     })
     .attr('font-size', '12px')
     .attr('fill', '#5D6063')
+    // @ts-ignore
     .attr('y', (d, i) => {
       return weekScale(i)
     })
@@ -135,6 +153,7 @@ async function dateSquares(height, margin, weekBoxWidth, monthBoxHeight, svg, da
       }
       return color[0]
     })
+    // @ts-ignore
     .attr('x', (d, i) => {
       if (i % 7 === 0) {
         cellCol++
@@ -142,6 +161,7 @@ async function dateSquares(height, margin, weekBoxWidth, monthBoxHeight, svg, da
       const x = (cellCol - 1) * cellSize
       return cellCol > 1 ? x + cellMargin * (cellCol - 1) : x
     })
+    // @ts-ignore
     .attr('y', (d, i) => {
       const y = i % 7
       return y > 0 ? y * cellSize + cellMargin * y : y * cellSize
@@ -165,7 +185,12 @@ async function dateSquares(height, margin, weekBoxWidth, monthBoxHeight, svg, da
   svg.select(`#heatmap-${day}`).style('stroke', '#E34234').style('stroke-width', '1px')
 }
 
+/**
+ * 查询数据
+ * @returns data
+ */
 async function queryDate() {
+  // @ts-ignore
   const { isdailyNote, ignoreText } = await getData()
   let response
   if (isdailyNote === true) {
@@ -198,7 +223,8 @@ async function dataChart() {
     resDate.forEach(param => {
       const { date, count } = param
       // 格式化date，封装进新数组
-      const formatDate = `${date.substring(0, 4)}-${(date.substring(4, 6) > 10 ? date.substring(4, 6) : date.substring(4, 6).substring(1, 2))}-${(date.substring(6, 8) > 10 ? date.substring(6, 8) : date.substring(6, 8).substring(1.2))}`
+      console.log(date);
+      const formatDate = `${date.substring(0, 4)}-${(date.substring(4, 6) >= 10 ? date.substring(4, 6) : date.substring(4, 6).substring(1, 2))}-${(date.substring(6, 8) > 10 ? date.substring(6, 8) : date.substring(6, 8).substring(1.2))}`
       formatParams.push({ day: formatDate, total: count })
     })
   }
