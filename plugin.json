@@ -8,13 +8,16 @@
     "windows",
     "linux",
     "docker",
-    "darwin"
+    "darwin",
+    "android",
+    "ios"
   ],
   "frontends": [
     "desktop",
     "browser-desktop",
     "desktop-window",
-    "browser-mobile"
+    "browser-mobile",
+    "mobile"
   ],
   "displayName": {
     "default": "日历热力图"
