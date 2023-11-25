@@ -1,3 +1,7 @@
+- 1.0.20
+
+1. 支持安卓私服[#44](https://github.com/svtardust/Calendar-heatmap/issues/44)
+
 - 1.0.19
 
 1. 修复热力图10月份未显示问题[#42](https://github.com/svtardust/Calendar-heatmap/issues/42)
