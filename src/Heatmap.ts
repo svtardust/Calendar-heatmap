@@ -222,7 +222,7 @@ async function dataChart() {
     resDate.forEach(param => {
       const { date, count } = param;
       // 格式化date，封装进新数组
-      const formatDate = `${date.substring(0, 4)}-${(date.substring(4, 6) >= 10 ? date.substring(4, 6) : date.substring(4, 6).substring(1, 2))}-${(date.substring(6, 8) > 10 ? date.substring(6, 8) : date.substring(6, 8).substring(1.2))}`;
+      const formatDate = `${date.substring(0, 4)}-${(date.substring(4, 6) >= 10 ? date.substring(4, 6) : date.substring(4, 6).substring(1, 2))}-${(date.substring(6, 8) >= 10 ? date.substring(6, 8) : date.substring(6, 8).substring(1, 2))}`;
       formatParams.push({ day: formatDate, total: count });
     });
   }
