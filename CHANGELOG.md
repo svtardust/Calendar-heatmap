@@ -1,3 +1,7 @@
+- 1.0.21
+
+1. fix，特定日期不显示问题[[#45](https://github.com/svtardust/Calendar-heatmap/issues/45)
+
 - 1.0.20
 
 1. 支持安卓私服[#44](https://github.com/svtardust/Calendar-heatmap/issues/44)
