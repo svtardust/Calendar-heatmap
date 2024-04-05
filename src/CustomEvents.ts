@@ -7,9 +7,9 @@ import { getData, saveData } from './utils';
 /**
  * 加载数据，填充图区
  */
-export async function loadData() {
+export async function loadData(app) {
   // 填充热力图
-  await heatmap();
+  await heatmap(app);
   // 填充今日统计区域
   await statisticalRegionData();
 }

@@ -36,7 +36,7 @@ export default class CalendarHeatmap extends Plugin {
       title: '日历热力图',
       position: heatPosition,
       callback: async (evt) => {
-        await addOpenView(evt);
+        await addOpenView(evt, this.app);
       },
     });
   }
@@ -53,7 +53,7 @@ export default class CalendarHeatmap extends Plugin {
  * 热力图显示区域
  * @param evt 鼠标事件
  */
-async function addOpenView(evt: MouseEvent) {
+async function addOpenView(evt: MouseEvent, app) {
   const menu = new Menu('Calendar-heatmap');
   // 加载图区
   menu.addItem({ element: await viewElement() });
@@ -68,7 +68,7 @@ async function addOpenView(evt: MouseEvent) {
   document.getElementById('openViewElement').parentElement.parentElement.parentElement.style.padding = '0px';
   document.getElementById('openViewElement').parentElement.parentElement.parentElement.style.border = '0px';
   // 加载数据
-  await loadData();
+  await loadData(app);
   menu.open({
     x: evt.x,
     y: evt.y,

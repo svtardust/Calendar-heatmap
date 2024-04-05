@@ -3,8 +3,9 @@ import axios from 'axios';
 import { getColor, getData } from './utils';
 import dayjs from 'dayjs';
 import 'dayjs/locale/zh-cn';
+import {openTab } from 'siyuan';
 
-export async function heatmap() {
+export async function heatmap(app) {
   const width = 815;
   const height = 180;
   const margin = { top: 15, right: 30, bottom: 30, left: 25 };
@@ -20,7 +21,7 @@ export async function heatmap() {
 
   monthCoordinate(width, margin, weekBoxWidth, svg, months);
   weekCoordinate(height, margin, monthBoxHeight, svg);
-  await dateSquares(height, margin, weekBoxWidth, monthBoxHeight, svg, days);
+  await dateSquares(height, margin, weekBoxWidth, monthBoxHeight, svg, days, app);
 }
 
 /**
@@ -111,7 +112,7 @@ function weekCoordinate(height, margin, monthBoxHeight, svg) {
  * @param svg svg参数
  * @param days 所有日期
  */
-async function dateSquares(height, margin, weekBoxWidth, monthBoxHeight, svg, days) {
+async function dateSquares(height, margin, weekBoxWidth, monthBoxHeight, svg, days, app) {
   const color = await getColor();
   const cellBox = svg
     .append('g')
@@ -131,6 +132,23 @@ async function dateSquares(height, margin, weekBoxWidth, monthBoxHeight, svg, da
     .data(days)
     .enter()
     .append('rect')
+    .on('click', async function(e, d) {
+      const sql = `SELECT SUBSTR(created, 1, 8) AS date, root_id, hpath FROM blocks WHERE type = 'p' AND  hpath LIKE '/daily note%' GROUP BY SUBSTR(created, 1, 8) ORDER BY date DESC LIMIT 370`;
+      const response = await (await axios.post('/api/query/sql', { stmt: sql })).data.data;
+      for(let index = 0; index < response.length; index++){
+        if(response[index].date ===dayjs( d.date).format('YYYYMMDD')){
+          openTab({
+            app: app,
+            doc: {
+                id: response[index].root_id,
+                zoomIn: false
+            }
+          });
+          return;
+        }
+      }
+    //若不存在则新建
+  })
     .attr('width', cellSize)
     .attr('height', cellSize)
     .attr('rx', 3)
@@ -177,7 +195,7 @@ async function dateSquares(height, margin, weekBoxWidth, monthBoxHeight, svg, da
       message = '有' + d.total + '个内容块';
     }
     return d.date + '\n' + message;
-  });
+    });
   // 如果是当日日期边框显示为红色
   const date = new Date();
   const day = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
