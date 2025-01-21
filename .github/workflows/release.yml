@@ -1,9 +1,9 @@
-name: release
+name: Create Release on Tag Push
 
 on:
   push:
     tags:
-      - 'v*'
+      - "v*"
 
 jobs:
   build:
@@ -17,12 +17,12 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18
-          registry-url: 'https://registry.npmjs.org'
+          node-version: 20
+          registry-url: "https://registry.npmjs.org"
 
         # Install pnpm
       - name: Install pnpm
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v4
         id: pnpm-install
         with:
           version: 8
@@ -51,8 +51,7 @@ jobs:
       # Build for production, 这一步会生成一个 package.zip
       - name: Build for production
         run: pnpm build
-      
-      # 自动打包
+
       - name: Release
         uses: ncipollo/release-action@v1
         with:
@@ -61,7 +60,7 @@ jobs:
           # 读取或上传产出文件错误时是否应该使构建失败。
           artifactErrorsFailBuild: true
           # 表示要上传到版本的产出文件。 这可以是单个路径或以逗号分隔的路径列表，（可以理解为打包的包文件名称）
-          artifacts: 'package.zip'
-          token: ${{ secrets.RELEASE_TOKEN }}
+          artifacts: "package.zip"
+          token: ${{ secrets.GITHUB_TOKEN }}
           # 是否启用预发布版本
           prerelease: false
