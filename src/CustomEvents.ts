@@ -26,6 +26,7 @@ export async function setting() {
     height: '400px',
   });
   // 加载配置文件并赋值
+  // @ts-ignore
   const { isdailyNote, heatmapPosition, ignoreText, customColor } = await getData();
   document.getElementById('calendarHeatmapConfigCheckbox')['checked'] = isdailyNote;
   document.getElementById('calendarHeatmapConfigPosition')['checked'] = heatmapPosition;
@@ -65,10 +66,12 @@ async function calendarHeatmapConfigPosition(event) {
   const checked = event.target.checked;
   const heatmapConfig = await getData();
   if (checked) {
+    // @ts-ignore
     heatmapConfig.heatmapPosition = true;
     await saveData(JSON.stringify(heatmapConfig));
     document.getElementById('calendarHeatmapConfigPosition')['checked'] = true;
   } else {
+    // @ts-ignore
     heatmapConfig.heatmapPosition = false;
     await saveData(JSON.stringify(heatmapConfig));
     document.getElementById('calendarHeatmapConfigPosition')['checked'] = false;
@@ -82,13 +85,17 @@ async function calendarHeatmapConfigPosition(event) {
 async function calendarHeatmapConfigCheckd(event) {
   const checked = event.target.checked;
   const heatmapConfig = await getData();
+  
   if (checked) {
+    // @ts-ignore
     heatmapConfig.isdailyNote = true;
+    // @ts-ignore
     heatmapConfig.ignoreText = '';
     document.getElementById('calendarHeatmapConfigCheckbox')['checked'] = true;
     document.getElementById('calendarHeatmapConfigText')['value'] = '';
     await saveData(JSON.stringify(heatmapConfig));
   } else {
+    // @ts-ignore
     heatmapConfig.isdailyNote = false;
     document.getElementById('calendarHeatmapConfigCheckbox')['checked'] = false;
     await saveData(JSON.stringify(heatmapConfig));
@@ -104,7 +111,9 @@ async function calendarHeatmapConfigtextarea(event) {
   const text = event.target.value;
   const heatmapConfig = await getData();
   if (text != null) {
+    // @ts-ignore
     heatmapConfig.isdailyNote = false;
+    // @ts-ignore
     heatmapConfig.ignoreText = text;
     document.getElementById('calendarHeatmapConfigCheckbox')['checked'] = false;
     await saveData(JSON.stringify(heatmapConfig));
@@ -122,10 +131,12 @@ async function calendarHeatmapConfigColor(event) {
   if (index != -1) {
     const arrData = text.split(',');
     if (arrData.length === 5) {
+      // @ts-ignore
       heatmapConfig.customColor = arrData;
       await saveData(JSON.stringify(heatmapConfig));
     }
   } else {
+    // @ts-ignore
     heatmapConfig.customColor = text;
     await saveData(JSON.stringify(heatmapConfig));
   }

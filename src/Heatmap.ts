@@ -11,16 +11,46 @@ export async function heatmap() {
   const weekBoxWidth = 20;
   const monthBoxHeight = 20;
 
-  // 删除上一次作图
+  // 删除上一次作图和提示框
+  d3.selectAll('.heatmap-tooltip').remove();
   d3.select('#calendarHeatmapContent').selectAll('*').remove();
+  
+  // 创建容器并添加提示框
+  const container = d3.select('#calendarHeatmapContent')
+    .style('position', 'relative');
+    
+  const tooltip = d3.select('body')
+    .append('div')
+    .attr('class', 'heatmap-tooltip')
+    .style('position', 'fixed')
+    .style('visibility', 'hidden')
+    .style('background-color', 'var(--b3-card-background)')
+    .style('color', 'var(--b3-theme-on-background)')
+    .style('padding', '10px 14px')
+    .style('border-radius', '6px')
+    .style('font-size', '13px')
+    .style('line-height', '1.5')
+    .style('box-shadow', '0 3px 14px rgba(0, 0, 0, 0.15)')
+    .style('pointer-events', 'none')
+    .style('z-index', '9999')
+    .style('white-space', 'nowrap')
+    .style('border', '1px solid var(--b3-theme-surface-lighter)')
+    .style('-webkit-font-smoothing', 'antialiased')
+    .style('-moz-osx-font-smoothing', 'grayscale')
+    .style('font-family', 'var(--b3-font-family)');
+
   // 获取svg并定义svg高度和宽度
-  const svg = d3.select('#calendarHeatmapContent').append('svg').attr('width', width).attr('height', height - 55);
+  const svg = container
+    .append('svg')
+    .attr('width', width)
+    .attr('height', height - 55);
+  
   // 绘制图区
   const { months, days } = await dataChart();
 
   monthCoordinate(width, margin, weekBoxWidth, svg, months);
   weekCoordinate(height, margin, monthBoxHeight, svg);
-  await dateSquares(height, margin, weekBoxWidth, monthBoxHeight, svg, days);
+  await dateSquares(height, margin, weekBoxWidth, monthBoxHeight, svg, days, tooltip);
 }
 
 /**
@@ -111,7 +141,7 @@ function weekCoordinate(height, margin, monthBoxHeight, svg) {
  * @param svg svg参数
  * @param days 所有日期
  */
-async function dateSquares(height, margin, weekBoxWidth, monthBoxHeight, svg, days) {
+async function dateSquares(height, margin, weekBoxWidth, monthBoxHeight, svg, days, tooltip) {
   const color = await getColor();
   const cellBox = svg
     .append('g')
@@ -119,23 +149,28 @@ async function dateSquares(height, margin, weekBoxWidth, monthBoxHeight, svg, da
       'transform',
       'translate(' + ((margin.left - 15) + weekBoxWidth) + ', ' + (margin.top + 10) + ')',
     );
+  
   // 设置方块间距
   const cellMargin = 4;
   // 计算方块大小
   const cellSize = (height - margin.right - monthBoxHeight - cellMargin * 6 - 30) / 7;
+  
   // 方块列计数器
   let cellCol = 0;
-  // @ts-ignore
-  cellBox
+  
+  // 添加过渡效果
+  const cells = cellBox
     .selectAll('rect')
     .data(days)
     .enter()
     .append('rect')
     .attr('width', cellSize)
     .attr('height', cellSize)
-    .attr('rx', 3)
-    // 颜色坐标
-    .attr('fill', function(d) {
+    .style('cursor', 'pointer')
+    .style('transition', 'opacity 150ms ease')
+    
+  // 设置颜色和位置
+  cells.attr('fill', function(d) {
       if (d.total === undefined || d.total === 0) {
         return color[0];
       }
@@ -154,9 +189,7 @@ async function dateSquares(height, margin, weekBoxWidth, monthBoxHeight, svg, da
     })
     // @ts-ignore
     .attr('x', (d, i) => {
-      if (i % 7 === 0) {
-        cellCol++;
-      }
+      if (i % 7 === 0) cellCol++;
       const x = (cellCol - 1) * cellSize;
       return cellCol > 1 ? x + cellMargin * (cellCol - 1) : x;
     })
@@ -165,23 +198,106 @@ async function dateSquares(height, margin, weekBoxWidth, monthBoxHeight, svg, da
       const y = i % 7;
       return y > 0 ? y * cellSize + cellMargin * y : y * cellSize;
     })
-    .style('cursor', 'pointer')
-    // 唯一标识
-    .attr('id', d => {
-      return `heatmap-${d.date}`;
+    .attr('id', d => `heatmap-${d.date}`);
+    
+  // 添加悬停效果
+  cells.on('mouseover', function(event, d) {
+      const date = new Date(d.date);
+      const formatDate = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
+      
+      let content = '';
+      if (d.total === undefined || d.total === 0) {
+        content = `<div style="font-weight: 500;">${formatDate}</div><div style="opacity: 0.86;">暂无内容</div>`;
+      } else {
+        let countText = '';
+        if (d.total <= 10) {
+          countText = '少量';
+        } else if (d.total <= 30) {
+          countText = '适中';
+        } else if (d.total <= 60) {
+          countText = '较多';
+        } else {
+          countText = '大量';
+        }
+        content = `<div style="font-weight: 500;">${formatDate}</div><div style="opacity: 0.86;">${countText}内容：${d.total} 个块</div>`;
+      }
+      
+      // 显示提示框并计算位置
+      tooltip.html(content)
+        .style('visibility', 'visible');
+        
+      // 获取提示框尺寸和窗口尺寸
+      const tooltipNode = tooltip.node();
+      const tooltipRect = tooltipNode.getBoundingClientRect();
+      const windowWidth = window.innerWidth;
+      const windowHeight = window.innerHeight;
+      
+      // 计算位置
+      let left = event.clientX + 10;
+      let top = event.clientY - 10;
+      
+      // 如果提示框超出右侧边界，将其显示在左侧
+      if (left + tooltipRect.width > windowWidth - 20) {
+        left = event.clientX - tooltipRect.width - 10;
+      }
+      
+      // 如果提示框超出底部边界，将其显示在上方
+      if (top + tooltipRect.height > windowHeight - 20) {
+        top = event.clientY - tooltipRect.height - 10;
+      }
+      
+      // 应用计算后的位置
+      tooltip
+        .style('left', `${left}px`)
+        .style('top', `${top}px`);
+        
+      // 高亮效果
+      d3.select(this)
+        .transition()
+        .duration(150)
+        .style('opacity', 0.8)
+        .style('stroke', 'var(--b3-theme-on-surface)')
+        .style('stroke-width', '1.5px');
     })
-    // 日期方块添加鼠标移入时的数据提示
-    .append('title').text((d) => {
-    let message = '没有内容块';
-    if (d.total != 0 || d.total != undefined) {
-      message = '有' + d.total + '个内容块';
-    }
-    return d.date + '\n' + message;
-  });
-  // 如果是当日日期边框显示为红色
+    .on('mousemove', function(event) {
+      // 同样的位置计算逻辑用于移动事件
+      const tooltipNode = tooltip.node();
+      const tooltipRect = tooltipNode.getBoundingClientRect();
+      const windowWidth = window.innerWidth;
+      const windowHeight = window.innerHeight;
+      
+      let left = event.clientX + 10;
+      let top = event.clientY - 10;
+      
+      if (left + tooltipRect.width > windowWidth - 20) {
+        left = event.clientX - tooltipRect.width - 10;
+      }
+      
+      if (top + tooltipRect.height > windowHeight - 20) {
+        top = event.clientY - tooltipRect.height - 10;
+      }
+      
+      tooltip
+        .style('left', `${left}px`)
+        .style('top', `${top}px`);
+    })
+    .on('mouseout', function() {
+      tooltip.style('visibility', 'hidden');
+      
+      d3.select(this)
+        .transition()
+        .duration(150)
+        .style('opacity', 1)
+        .style('stroke', null)
+        .style('stroke-width', null);
+    });
+
+  // 当日日期标记
   const date = new Date();
   const day = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
-  svg.select(`#heatmap-${day}`).style('stroke', '#E34234').style('stroke-width', '1px');
+  svg.select(`#heatmap-${day}`)
+     .style('stroke', 'var(--b3-theme-primary)')
+     .style('stroke-width', '2px');
 }
 
 /**

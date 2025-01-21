@@ -14,21 +14,49 @@ export async function viewElement() {
   const calendarHeatmapContent = document.createElement('div');
   calendarHeatmapContent.setAttribute('id', 'calendarHeatmapContent');
   divElement.appendChild(calendarHeatmapContent);
-  // @ts-ignore
-  divElement.setAttribute('style', `background-color: ${siyuan.config.appearance.mode === 0 ? '#FFFFFF' : '#0D1117'};`);
+  divElement.setAttribute('style', `
+    background-color: var(--b3-theme-background);
+    padding: 16px 8px;
+  `);
+  
   // 今日块统计区域
   const topElement = document.createElement('div');
-  topElement.setAttribute('style', 'letter-spacing: 1px;font-size: 11px;font-family: monospace; color: #5D6063; height:30px');
+  topElement.setAttribute('style', `
+    letter-spacing: 1px;
+    font-size: 12px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: var(--b3-theme-on-surface);
+    height: 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  `);
+  
   const topLeftElement = document.createElement('div');
   topLeftElement.setAttribute('id', 'StatisticalRegion');
-  topLeftElement.setAttribute('style', 'padding-left: 32px;');
-  topLeftElement.style.float = 'left';
+  topLeftElement.setAttribute('style', 'padding-left: 16px;');
   topElement.appendChild(topLeftElement);
+  
   const colors = await getColor();
   colors.forEach(item => {
-    color = color + (`<span style='width: 10px; height: 10px; display:block; float:left; background-color: ${item}; margin-left: 1px; margin-top: 10px; border-radius: 2px'></span>`);
+    color = color + (`<span style='
+      width: 12px;
+      height: 12px;
+      display: block;
+      float: left;
+      background-color: ${item};
+      margin-left: 3px;
+      transition: transform 0.2s ease;
+    '></span>`);
   });
-  topElement.insertAdjacentHTML('beforeend', `<div style='float: right; padding-right: 10px;'><span style='float: left; padding-right: 3px; padding-top: 2px;'>少</span><span>${color}</span><span style='padding-left: 5px; padding-top: 2px;'>多</span></div>`);
+  
+  topElement.insertAdjacentHTML('beforeend', `
+    <div style='display: flex; align-items: center; padding-right: 12px;'>
+      <span style='padding-right: 6px;'>少</span>
+      <span style='display: flex; align-items: center;'>${color}</span>
+      <span style='padding-left: 6px;'>多</span>
+    </div>
+  `);
   divElement.appendChild(topElement);
 
   return divElement;

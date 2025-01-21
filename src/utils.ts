@@ -24,16 +24,34 @@ export function saveData(data) {
 
 export async function getColor() {
   let color = [];
+  // @ts-ignore
   const { customColor, lightColor, darkColor } = await getData();
-  if (customColor.length != 0 && customColor.length === 5) {
+  if (customColor && customColor.length === 5) {
     color = customColor;
   } else {
+    // 亮色系
+    const defaultLightColors = [
+      '#ebedf0',  // 最浅，无数据
+      '#9be9a8',  // 少量数据
+      '#40c463',  // 中等数据
+      '#30a14e',  // 较多数据
+      '#216e39'   // 大量数据
+    ];
+    
+    // 暗色系
+    const defaultDarkColors = [
+      '#2d333b',  // 最浅，无数据
+      '#0e4429',  // 少量数据
+      '#006d32',  // 中等数据
+      '#26a641',  // 较多数据
+      '#39d353'   // 大量数据
+    ];
+
     // @ts-ignore
-    if (siyuan.config.appearance.mode === 0) {
-      color = lightColor;
-    } else {
-      color = darkColor;
-    }
+    const isLight = siyuan.config.appearance.mode === 0;
+    color = isLight 
+      ? (lightColor || defaultLightColors)
+      : (darkColor || defaultDarkColors);
   }
   return color;
 }
