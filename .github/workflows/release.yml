@@ -61,6 +61,6 @@ jobs:
           artifactErrorsFailBuild: true
           # 表示要上传到版本的产出文件。 这可以是单个路径或以逗号分隔的路径列表，（可以理解为打包的包文件名称）
           artifacts: "package.zip"
-          token: ${{ secrets.RELEASE_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           # 是否启用预发布版本
           prerelease: false
