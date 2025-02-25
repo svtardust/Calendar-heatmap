@@ -1,3 +1,7 @@
+- 1.0.24
+
+- 解决文本显示问题[#53](https://github.com/svtardust/Calendar-heatmap/issues/53)
+
 - 1.0.23
 
 - 解决自定义配色填写后不生效问题[#54](https://github.com/svtardust/Calendar-heatmap/issues/54)
