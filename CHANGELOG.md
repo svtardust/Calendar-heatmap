@@ -1,3 +1,7 @@
+- 1.0.25
+
+- 修改样式
+
 - 1.0.24
 
 - 解决文本显示问题[#53](https://github.com/svtardust/Calendar-heatmap/issues/53)
