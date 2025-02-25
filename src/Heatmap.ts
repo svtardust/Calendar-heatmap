@@ -7,8 +7,8 @@ import 'dayjs/locale/zh-cn';
 export async function heatmap() {
   const width = 815;
   const height = 180;
-  const margin = { top: 15, right: 30, bottom: 30, left: 25 };
-  const weekBoxWidth = 20;
+  const margin = { top: 10, right: 30, bottom: 30, left: 20 };
+  const weekBoxWidth = 15;
   const monthBoxHeight = 20;
 
   // 删除上一次作图和提示框
@@ -67,13 +67,11 @@ export async function heatmap() {
  * @param months 月数据
  */
 function monthCoordinate(width, margin, weekBoxWidth, svg, months) {
-  // 绘制月坐标
-  // @ts-ignore
   const monthBox = svg
     .append('g')
     .attr(
       'transform',
-      'translate(' + (margin.left - 10) + ', ' + margin.top + ')',
+      'translate(' + (margin.left - 5) + ', ' + margin.top + ')',
     );
   // @ts-ignore
   const monthScale = d3
@@ -111,7 +109,7 @@ function weekCoordinate(height, margin, monthBoxHeight, svg) {
     .append('g')
     .attr(
       'transform',
-      `translate(${margin.left - 20}, ${margin.top + monthBoxHeight})`,
+      `translate(${margin.left - 15}, ${margin.top + monthBoxHeight})`,
     );
   const weekScale = d3
     .scaleLinear()

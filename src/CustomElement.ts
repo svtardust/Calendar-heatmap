@@ -16,7 +16,7 @@ export async function viewElement() {
   divElement.appendChild(calendarHeatmapContent);
   divElement.setAttribute('style', `
     background-color: var(--b3-theme-background);
-    padding: 16px 8px;
+    padding: 5px 5px;
   `);
   
   // 今日块统计区域
@@ -26,15 +26,16 @@ export async function viewElement() {
     font-size: 12px;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     color: var(--b3-theme-on-surface);
-    height: 32px;
+    height: 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-top: -12px;
   `);
   
   const topLeftElement = document.createElement('div');
   topLeftElement.setAttribute('id', 'StatisticalRegion');
-  topLeftElement.setAttribute('style', 'padding-left: 16px;');
+  topLeftElement.setAttribute('style', 'padding-left: 10px;');
   topElement.appendChild(topLeftElement);
   
   const colors = await getColor();
