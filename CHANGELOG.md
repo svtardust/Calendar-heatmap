@@ -1,10 +1,14 @@
+- 1.0.23
+
+- 解决自定义配色填写后不生效问题[#54](https://github.com/svtardust/Calendar-heatmap/issues/54)
+
 - 1.0.22
 
 - 优化样式，更加美观柔和，只限亮色主题
 
 - 1.0.21
 
-1. fix，特定日期不显示问题[[#45](https://github.com/svtardust/Calendar-heatmap/issues/45)
+1. fix，特定日期不显示问题[#45](https://github.com/svtardust/Calendar-heatmap/issues/45)
 
 - 1.0.20
 
