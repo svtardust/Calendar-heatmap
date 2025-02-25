@@ -24,7 +24,7 @@ export async function heatmap() {
     .attr('class', 'heatmap-tooltip')
     .style('position', 'fixed')
     .style('visibility', 'hidden')
-    .style('background-color', 'var(--b3-card-background)')
+    .style('background-color', 'var(--b3-menu-background)')
     .style('color', 'var(--b3-theme-on-background)')
     .style('padding', '10px 14px')
     .style('border-radius', '6px')
@@ -37,7 +37,12 @@ export async function heatmap() {
     .style('border', '1px solid var(--b3-theme-surface-lighter)')
     .style('-webkit-font-smoothing', 'antialiased')
     .style('-moz-osx-font-smoothing', 'grayscale')
-    .style('font-family', 'var(--b3-font-family)');
+    .style('font-family', 'var(--b3-font-family)')
+    .style('font-weight', '400')
+    .style('letter-spacing', '0.2px')
+    .style('opacity', '0.95')
+    .style('backdrop-filter', 'blur(4px)')
+    .style('-webkit-backdrop-filter', 'blur(4px)');
 
   // 获取svg并定义svg高度和宽度
   const svg = container
@@ -102,20 +107,17 @@ function monthCoordinate(width, margin, weekBoxWidth, svg, months) {
  */
 function weekCoordinate(height, margin, monthBoxHeight, svg) {
   const weeks = ['一', '三', '五', '日'];
-  // @ts-ignore
   const weekBox = svg
     .append('g')
     .attr(
       'transform',
       `translate(${margin.left - 20}, ${margin.top + monthBoxHeight})`,
     );
-  // @ts-ignore
   const weekScale = d3
     .scaleLinear()
     .domain([0, weeks.length])
     .range([0, height - margin.right - monthBoxHeight - 13]);
 
-  // @ts-ignore
   weekBox
     .selectAll('text')
     .data(weeks)
@@ -124,9 +126,11 @@ function weekCoordinate(height, margin, monthBoxHeight, svg) {
     .text((d) => {
       return d;
     })
-    .attr('font-size', '12px')
-    .attr('fill', '#5D6063')
-    // @ts-ignore
+    .style('font-size', '12px')
+    .style('font-family', 'var(--b3-font-family)')
+    .style('fill', 'var(--b3-theme-on-surface)')
+    .style('font-weight', '450')
+    .style('letter-spacing', '0.2px')
     .attr('y', (d, i) => {
       return weekScale(i);
     });
