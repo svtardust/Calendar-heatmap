@@ -127,17 +127,16 @@ async function calendarHeatmapConfigtextarea(event) {
 async function calendarHeatmapConfigColor(event) {
   const text = event.target.value;
   const heatmapConfig = await getData();
-  const index = text.indexOf(',');
-  if (index != -1) {
+  if (text != '') {
     const arrData = text.split(',');
     if (arrData.length === 5) {
       // @ts-ignore
-      heatmapConfig.customColor = arrData;
+      heatmapConfig.customColor = Array.isArray(arrData) ? arrData : [arrData];
       await saveData(JSON.stringify(heatmapConfig));
     }
   } else {
     // @ts-ignore
-    heatmapConfig.customColor = text;
+    heatmapConfig.customColor = Array.isArray(text) ? text : [text];;
     await saveData(JSON.stringify(heatmapConfig));
   }
 }
