@@ -66,6 +66,7 @@ async function addOpenView(evt: MouseEvent) {
   document.getElementById('openViewElement').parentElement.style.cursor = 'auto';
   // 取消默认边距，边框
   document.getElementById('openViewElement').parentElement.parentElement.parentElement.style.padding = '0px';
+  document.getElementById('openViewElement').parentElement.parentElement.style.padding = '0px';
   document.getElementById('openViewElement').parentElement.parentElement.parentElement.style.border = '0px';
   // 加载数据
   await loadData();

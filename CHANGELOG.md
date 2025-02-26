@@ -1,3 +1,7 @@
+- 1.0.26
+
+1. 美化样式[#53](https://github.com/svtardust/Calendar-heatmap/issues/53)
+
 - 1.0.25
 
 - 修改样式
